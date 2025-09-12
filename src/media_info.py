@@ -1,14 +1,12 @@
 import ffmpeg
 import os
 from src.Metadata_Receiving import video_info, audio_info, subtitle_info
-# from App.storage import app_state
 
 class Info():
     def __init__(self):
         self.container = []
         self.info_main_lib = []
         self.conteg = {}
-        self.debug_message = ''
         self.global_path = ''
 
 
@@ -42,12 +40,13 @@ class Info():
             self.conteg = {
                 'name': name_path,
                 'index': x+1,
+                'access': 1,
                 'video': [],
                 'audio': [],
                 'subtitle': []
                 }
             
-            probe = ffmpeg.probe(name_path)
+            probe = ffmpeg.probe(f'{global_path}/{name_path}')
             for stream in probe['streams']:
 
                 if stream['codec_type'] == 'video':
@@ -64,6 +63,8 @@ class Info():
                     self.conteg['subtitle'].append(subtitle_data_add)
 
             self.info_main_lib[global_path].append(self.conteg)
+        
+        return self.info_main_lib
 
 
 

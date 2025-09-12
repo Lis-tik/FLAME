@@ -1,5 +1,5 @@
-from src.media_info import Info
 
+from src.media_info import Info
 
 
 class AppState:
@@ -16,8 +16,13 @@ class AppState:
         self.activeFilesHome = []
         self.infoMode = 'video'
 
+        self.InfoData = Info()
+        self.mediainfo_Original = None
+        self.mediainfo_Copy = None
 
-        self._mediainfo = Info()
+    def at_work_files(self):
+        for media in self.mediainfo_Copy:
+            return
 
 
     def new_page(self, new_page):
@@ -43,11 +48,10 @@ class AppState:
     def files(self, new_value):
         self._files = new_value
 
-        info_list = []
-        for i in new_value:
-            info_list.append(f'{self.global_path}/{i}') 
+        self.mediainfo_Original = self.InfoData.start_getinfo(self._files, self.global_path)
+        self.mediainfo_Copy = self.mediainfo_Original
 
-        self._mediainfo.start_getinfo(info_list, self.global_path)
+        print(self.mediainfo_Original)
         
     
         
