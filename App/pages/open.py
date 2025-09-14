@@ -28,7 +28,7 @@ def open_directory_dialog():
 def create_project():
     return ft.Column(
         controls=[
-            ft.Text(f"Добро пожаловать в ABR Maker", size=30, weight="bold"),
+            ft.Text(f"Добро пожаловать в FLAME", size=30, weight="bold"),
             ft.Text("Выберите директорию для нового проекта", size=16),
             ft.ElevatedButton(
                 "Создать +",

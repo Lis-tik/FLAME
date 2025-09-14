@@ -3,3 +3,5 @@ options/
 mpd_test/
 __pycache__/
 *.py[cod]
+.vscode/
+.venv/

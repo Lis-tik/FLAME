@@ -12,6 +12,11 @@ def setting_converter():
                 "Назад",
                 on_click=lambda e: app_state.new_page(rout.Page_Home),  # Возврат на главную
             ),
+
+            ft.ElevatedButton(
+                "Запустить конвертер",
+                on_click=lambda e: app_state.new_page(rout.Page_Home),  # Возврат на главную
+            ),
         ],
         alignment="center",
         horizontal_alignment="center",

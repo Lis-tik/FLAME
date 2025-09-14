@@ -9,6 +9,22 @@ class Info():
         self.conteg = {}
         self.global_path = ''
 
+    def debug_info(self, instance):
+        debug_messages = ''
+
+        for file in instance:
+            observed_list = {}
+            for audio in instance[file]['audio']:
+                if not audio['title']:
+                    debug_messages += (f'Аудиодорожка [{audio['index']}] не имеет описания\n')
+                else:
+                    observed_list.setdefault(audio['title'], []).append(audio['index'])
+                    if len(observed_list[audio['title']]) > 1:
+                        debug_messages += (f'Аудиодорожки [{observed_list[audio['title']]}] имеют одинаковое описание!')
+
+        return debug_messages
+                
+
 
 
     def edit_workspace(self):
@@ -19,11 +35,11 @@ class Info():
         if mode == -1:
             for x in range(len(self.info_main_lib[self.global_path])):
                 if correct[2]:
-                    self.info_main_lib[self.global_path][x][correct[0]][int(correct[1])][correct[2]] = correct[3]
+                    self.info_main_lib[x][correct[0]][int(correct[1])][correct[2]] = correct[3]
                 else:
-                    del self.info_main_lib[self.global_path][x][correct[0]][int(correct[1])]
+                    del self.info_main_lib[x][correct[0]][int(correct[1])]
         else:
-            self.info_main_lib[self.global_path][mode][correct[0]][int(correct[1])][correct[2]] = correct[3]
+            self.info_main_lib[mode][correct[0]][int(correct[1])][correct[2]] = correct[3]
 
 
     
@@ -33,36 +49,38 @@ class Info():
         self.container = container
         self.global_path = global_path
 
-        self.info_main_lib = {global_path: []}
+        self.info_main_lib = {}
         for x in range(len(self.container)):
             name_path = self.container[x]
 
-            self.conteg = {
+            self.info_main_lib[name_path] = { 
                 'name': name_path,
+                'path': global_path,
                 'index': x+1,
-                'access': 1,
+                'status': 1,
                 'video': [],
                 'audio': [],
                 'subtitle': []
                 }
             
+
+        
             probe = ffmpeg.probe(f'{global_path}/{name_path}')
             for stream in probe['streams']:
 
                 if stream['codec_type'] == 'video':
                     video_data_add = video_info(stream)
-                    self.conteg['video'].append(video_data_add)
+                    self.info_main_lib[name_path]['video'].append(video_data_add)
                         
 
                 if stream['codec_type'] == 'audio':
                     audio_data_add = audio_info(stream)
-                    self.conteg['audio'].append(audio_data_add)
+                    self.info_main_lib[name_path]['audio'].append(audio_data_add)
 
                 if stream['codec_type'] == 'subtitle':
                     subtitle_data_add = subtitle_info(stream)
-                    self.conteg['subtitle'].append(subtitle_data_add)
+                    self.info_main_lib[name_path]['subtitle'].append(subtitle_data_add)
 
-            self.info_main_lib[global_path].append(self.conteg)
         
         return self.info_main_lib
 
@@ -71,15 +89,16 @@ class Info():
     def update_chanel(self, new_data):
         for x in range(len(new_data)):
             probe = ffmpeg.probe(new_data[x])
+
             for stream in probe['streams']:
                 if stream['codec_type'] == 'audio':
 
                     new_audio_chanel = self.audio_info(stream, new_data[x])
-                    self.info_main_lib[self.global_path][x]['audio'].append(new_audio_chanel)
+                    self.info_main_lib[x]['audio'].append(new_audio_chanel)
 
                 if stream['codec_type'] == 'subtitle':
                     new_subtitle_chanel = self.subtitle_info(stream, new_data[x])
-                    self.info_main_lib[self.global_path][x]['subtitle'].append(new_subtitle_chanel)
+                    self.info_main_lib[x]['subtitle'].append(new_subtitle_chanel)
 
 
         # if len(os.listdir(aud_lt)) < len(self.main_data):
@@ -109,7 +128,7 @@ class Info():
     def summary_data(self):
         summary_message = f'Всего файлов: {len(self.info_main_lib)}\n'
 
-        pass_role = self.info_main_lib[self.global_path]
+        pass_role = self.info_main_lib
         for x in range(len(pass_role)):
 
             pth = pass_role[x]
