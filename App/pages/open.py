@@ -3,7 +3,7 @@ from tkinter import Tk, filedialog
 from App.storage import app_state
 import App.router as rout
 import os
-
+from pathlib import Path
 
 
 
@@ -58,6 +58,7 @@ def create_project():
 
 
 def projects_manage():
+    Path('./projectslib').mkdir(exist_ok=True)
     projects = [f for f in os.listdir('./projectslib')]
     if projects:
         return projects_library(projects)

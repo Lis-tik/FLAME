@@ -67,7 +67,6 @@ class EditingInput(ft.TextField):
 class SampleMode(ft.Checkbox):
     def __init__(self):
         super().__init__()
-        self.label = 'Убрать все выделенные файлы' #if (len(app_state.activeFilesHome) > 0) else 'Выделить все файлы'
         # self.on_change = self.SampleModeFunc
 
         self.value = False #if (len(app_state.mediainfo_Copy) == len(app_state.files)) else False
@@ -126,6 +125,10 @@ class ModeButton(ft.ElevatedButton):
 
 def videoChannel(state):
     return ft.Column([
+        ft.Checkbox(
+            'Включить в итоговый контейнер',
+            value=True
+        ),
         ft.Row([
             ft.Text(f"Разрешение сторон:", size=15, weight='bold'),
             ft.Text(f"{state['width']}x{state['height']}", size=15),
@@ -144,6 +147,10 @@ def videoChannel(state):
 
 def subtitleChannel(state, index):
     return ft.Column([
+        ft.Checkbox(
+            'Включить в итоговый контейнер',
+            value=True
+        ),
         ft.Row([
             ft.Text("Описание (имя) субтитров:", size=15, weight='bold'),
             EditingInput(state['title'], index, 'subtitle')
@@ -167,6 +174,10 @@ def subtitleChannel(state, index):
 
 def audioChannel(state, index):
     return ft.Column([
+        ft.Checkbox(
+            'Включить в итоговый контейнер',
+            value=True
+        ),
         ft.Row([
             ft.Text("Описание (имя) аудиодорожки:", size=15, weight='bold'),
             EditingInput(state['title'], index, 'audio')
