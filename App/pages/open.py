@@ -25,11 +25,28 @@ def open_directory_dialog():
 
 
 
+
+def projects_library(projects):
+    buttonList = []
+    for project in projects:
+        butLi = ft.ElevatedButton(
+            project,
+            on_click=lambda e: open_directory_dialog(), 
+        )
+        buttonList.append(butLi)
+    buttonList.append(ft.ElevatedButton('Создать новый проект', on_click=lambda e: open_directory_dialog()))
+
+    return ft.Column([
+            ft.Text(f"Добро пожаловать в FLAME", size=30, weight="bold"),
+            ft.Text("Откройте сохраненный проект или создайте новый!", size=16),
+            ft.Row(buttonList)
+        ])
+
 def create_project():
     return ft.Column(
         controls=[
             ft.Text(f"Добро пожаловать в FLAME", size=30, weight="bold"),
-            ft.Text("Выберите директорию для нового проекта", size=16),
+            ft.Text("Создайте свой первый проект!", size=16),
             ft.ElevatedButton(
                 "Создать +",
                 on_click=lambda e: open_directory_dialog(), 
@@ -38,3 +55,16 @@ def create_project():
         alignment="center",
         horizontal_alignment="center",
     )
+
+
+def projects_manage():
+    projects = [f for f in os.listdir('./projectslib')]
+    if projects:
+        return projects_library(projects)
+    
+    return create_project()
+
+
+    
+        
+
