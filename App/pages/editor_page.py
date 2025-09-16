@@ -7,6 +7,7 @@ import os
 
 
 
+
 class UnificationButton(ft.ElevatedButton):
     def __init__(self, text):
         super().__init__()
@@ -55,7 +56,6 @@ class EditingInput(ft.TextField):
     
     def handle_change(self, e):
         app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_file][self.mode][self.index]['title'] = self.value
-        print(f"Новый текст: {self.value}")
         
         if not self.value:
             self.border_color = ft.Colors.RED
@@ -93,9 +93,23 @@ class StatusCheck(ft.Checkbox):
         app_state.EditorPage.mediainfo_copy[self.file]['status'] = int(not(app_state.EditorPage.mediainfo_copy[self.file]['status']))
         app_state.new_page(rout.Page_Home)
 
+        
+
+class StatusMediaFlag(ft.Checkbox):
+    def __init__(self, index):
+        super().__init__()
+        self.index = index
+        self.on_change = self.dataCheck
+        self.value = bool(int(app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_file][app_state.EditorPage.info_mode][self.index]['status']))
+        self.label = 'Дорожка будет включена в итоговый контейнер' if self.value else 'Дорожка исключена из итогового контейнер'
+
+    def dataCheck(self, e):
+        app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_file][app_state.EditorPage.info_mode][self.index]['status'] = not(bool(app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_file][app_state.EditorPage.info_mode][self.index]['status']))
+        print(app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_file][app_state.EditorPage.info_mode][self.index]['status'], 'llll')
+        app_state.new_page(rout.Page_Home)
 
         
-        
+     
 
 class ModeButton(ft.ElevatedButton):
     def __init__(self, text, mode):
@@ -124,90 +138,90 @@ class ModeButton(ft.ElevatedButton):
         
 
 def videoChannel(state):
-    return ft.Column([
-        ft.Checkbox(
-            'Включить в итоговый контейнер',
-            value=True
-        ),
-        ft.Row([
-            ft.Text(f"Разрешение сторон:", size=15, weight='bold'),
-            ft.Text(f"{state['width']}x{state['height']}", size=15),
+    return ft.Container(
+        ft.Column([
+            # StatusMediaFlag(index),
+            ft.Row([
+                ft.Text(f"Разрешение сторон:", size=15, weight='bold'),
+                ft.Text(f"{state['width']}x{state['height']}", size=15),
+            ]),
+            ft.Row([
+                ft.Text(f"Тип цветопередачи:", size=15, weight='bold'),
+                ft.Text(f"{state['pix_fmt']}", size=15),
+            ]),
+            ft.Row([
+                ft.Text(f"Профиль:", size=15, weight='bold'),
+                ft.Text(f"{state['profile']}", size=15),
+            ]),
+            ft.Divider(height=1)
         ]),
-        ft.Row([
-            ft.Text(f"Тип цветопередачи:", size=15, weight='bold'),
-            ft.Text(f"{state['pix_fmt']}", size=15),
-        ]),
-        ft.Row([
-            ft.Text(f"Профиль:", size=15, weight='bold'),
-            ft.Text(f"{state['profile']}", size=15),
-        ]),
-        ft.Divider(height=1)
-    ])
+        bgcolor=ft.Colors.TRANSPARENT if int(state['status']) else ft.Colors.BLACK12
+    )
 
 
 def subtitleChannel(state, index):
-    return ft.Column([
-        ft.Checkbox(
-            'Включить в итоговый контейнер',
-            value=True
-        ),
-        ft.Row([
-            ft.Text("Описание (имя) субтитров:", size=15, weight='bold'),
-            EditingInput(state['title'], index, 'subtitle')
+    return ft.Container(
+        ft.Column([
+            StatusMediaFlag(index),
+            ft.Row([
+                ft.Text("Описание (имя) субтитров:", size=15, weight='bold'),
+                EditingInput(state['title'], index, 'subtitle')
+            ]),
+            ft.Row([
+                ft.Text(f"Язык субтитров:", size=15, weight='bold'),
+                ft.Text(f"{state['language']}", size=15),
+            ]),
+            ft.Row([
+                ft.Text(f"Формат:", size=15, weight='bold'),
+                ft.Text(f"{state['format']}", size=15),
+            ]),
+            ft.Row([
+                ft.Text(f"Источник:", size=15, weight='bold'),
+                ft.Text(f"{state['path'] if state['path'] else '[в составе контейнера]'}", size=15),
+            ]),
+            ft.Divider(height=1)
         ]),
-        ft.Row([
-            ft.Text(f"Язык субтитров:", size=15, weight='bold'),
-            ft.Text(f"{state['language']}", size=15),
-        ]),
-        ft.Row([
-            ft.Text(f"Формат:", size=15, weight='bold'),
-            ft.Text(f"{state['format']}", size=15),
-        ]),
-        ft.Row([
-            ft.Text(f"Источник:", size=15, weight='bold'),
-            ft.Text(f"{state['path'] if state['path'] else '[в составе контейнера]'}", size=15),
-        ]),
-        ft.Divider(height=1)
-    ])
+        bgcolor=ft.Colors.TRANSPARENT if int(state['status']) else ft.Colors.BLACK12
+    )
 
 
 
 def audioChannel(state, index):
-    return ft.Column([
-        ft.Checkbox(
-            'Включить в итоговый контейнер',
-            value=True
-        ),
-        ft.Row([
-            ft.Text("Описание (имя) аудиодорожки:", size=15, weight='bold'),
-            EditingInput(state['title'], index, 'audio')
+    return ft.Container(
+        ft.Column([
+            StatusMediaFlag(index),
+            ft.Row([
+                ft.Text("Описание (имя) аудиодорожки:", size=15, weight='bold'),
+                EditingInput(state['title'], index, 'audio')
+            ]),
+            ft.Row([
+                ft.Text(f"Индекс в контейнере:", size=15, weight='bold'),
+                ft.Text(f"{state['index']}", size=15),
+            ]),
+            ft.Row([
+                ft.Text(f"Язык аудиодорожки:", size=15, weight='bold'),
+                ft.Text(f"{state['language']}", size=15),
+            ]),
+            ft.Row([
+                ft.Text(f"Кодек аудиодорожки:", size=15, weight='bold'),
+                ft.Text(f"{state['codec_name']}", size=15),
+            ]),
+            ft.Row([
+                ft.Text(f"Количество каналов:", size=15, weight='bold'),
+                ft.Text(f"{state['channels']}", size=15),
+            ]),
+            ft.Row([
+                ft.Text(f"Битрейт:", size=15, weight='bold'),
+                ft.Text(f"{state['bit_rate']}", size=15),
+            ]),
+            ft.Row([
+                ft.Text(f"Источник:", size=15, weight='bold'),
+                ft.Text(f"{state['path'] if state['path'] else '[в составе контейнера]'}", size=15),
+            ]),
+            ft.Divider(height=1)
         ]),
-        ft.Row([
-            ft.Text(f"Индекс в контейнере:", size=15, weight='bold'),
-            ft.Text(f"{state['index']}", size=15),
-        ]),
-        ft.Row([
-            ft.Text(f"Язык аудиодорожки:", size=15, weight='bold'),
-            ft.Text(f"{state['language']}", size=15),
-        ]),
-        ft.Row([
-            ft.Text(f"Кодек аудиодорожки:", size=15, weight='bold'),
-            ft.Text(f"{state['codec_name']}", size=15),
-        ]),
-        ft.Row([
-            ft.Text(f"Количество каналов:", size=15, weight='bold'),
-            ft.Text(f"{state['channels']}", size=15),
-        ]),
-        ft.Row([
-            ft.Text(f"Битрейт:", size=15, weight='bold'),
-            ft.Text(f"{state['bit_rate']}", size=15),
-        ]),
-        ft.Row([
-            ft.Text(f"Источник:", size=15, weight='bold'),
-            ft.Text(f"{state['path'] if state['path'] else '[в составе контейнера]'}", size=15),
-        ]),
-        ft.Divider(height=1)
-    ])
+        bgcolor=ft.Colors.TRANSPARENT if int(state['status']) else ft.Colors.BLACK12
+    )
 
 
 
@@ -272,7 +286,12 @@ def Information():
 def metaData():
     return ft.Container(
         content=ft.Column([
-            ft.Text(app_state.EditorPage.viewed_file if app_state.EditorPage.viewed_file else 'Информация', size=20, weight='bold'),
+            ft.Row([
+                ft.Text(app_state.EditorPage.viewed_file if app_state.EditorPage.viewed_file else 'Информация', size=20, weight='bold'),
+                ft.Text('Status: ', size=20)
+            ],
+            alignment="spaceBetween"),
+
             ft.Divider(height=1),
             ft.Row(   # кнопки сверху
                 [
@@ -302,8 +321,6 @@ def distributionData():
     
     info_page = []
 
-    info_page.append(ft.Text(f"Статус: ", size=15))
-
     if app_state.EditorPage.info_mode == 'audio':
         info_page.append(ft.ElevatedButton('Добавить аудиодорожку'))
         info_page.append(ft.Divider(height=1))
@@ -328,9 +345,7 @@ def distributionData():
         info_page.append(textField)
 
 
-    return ft.Container(
-        content=ft.Column(info_page)
-    )
+    return ft.Column(info_page)
 
 
 
@@ -362,7 +377,7 @@ def navigation():
 
 def Label():
     return ft.Container(
-        content=ft.Text("ABR Maker", size=30, weight='bold'),
+        content=ft.Text("FLAME", size=30, weight='bold'),
         padding=5,
     )
 
