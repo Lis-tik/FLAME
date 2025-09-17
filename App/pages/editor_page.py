@@ -21,8 +21,10 @@ class UnificationButton(ft.ElevatedButton):
 
     def enable_unification_mode(self, e):
         app_state.EditorPage.unification_mode = not(app_state.EditorPage.unification_mode)
+
         if not app_state.EditorPage.unification_mode:
-            app_state.EditorPage.viewed_files = app_state.EditorPage.viewed_files[-1]
+            app_state.EditorPage.viewed_files = [app_state.EditorPage.viewed_files[-1]]
+
         app_state.new_page(rout.Page_Home)
 
 
@@ -43,6 +45,8 @@ class RuleButton(ft.ElevatedButton):
         if app_state.EditorPage.unification_mode:
             if not (self.text in app_state.EditorPage.viewed_files):
                 app_state.EditorPage.viewed_files.append(self.text)
+            else:
+                app_state.EditorPage.viewed_files.remove(self.text)
         else:
             app_state.EditorPage.viewed_files = [self.text]
             
@@ -64,7 +68,7 @@ class EditingInput(ft.TextField):
 
     
     def handle_change(self, e):
-        app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files][self.mode][self.index]['title'] = self.value
+        app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][self.mode][self.index]['title'] = self.value
         
         if not self.value:
             self.border_color = ft.Colors.RED
@@ -113,8 +117,7 @@ class StatusMediaFlag(ft.Checkbox):
         self.label = 'Дорожка будет включена в итоговый проект' if self.value else 'Дорожка исключена из итогового проекта'
 
     def dataCheck(self, e):
-        app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files][app_state.EditorPage.info_mode][self.index]['status'] = not(bool(app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_file][app_state.EditorPage.info_mode][self.index]['status']))
-        print(app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files][app_state.EditorPage.info_mode][self.index]['status'], 'llll')
+        app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][self.index]['status'] = not(bool(app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][self.index]['status']))
         app_state.new_page(rout.Page_Home)
 
         
@@ -293,14 +296,26 @@ def Information():
     )
 
 def metaData():
+    
+    def modecheck():
+        container = []
+        if not app_state.EditorPage.viewed_files:
+            container.append(ft.Row([
+                ft.Text('Информация: ', size=15, weight='bold')
+                ], alignment="spaceBetween"))
+        else:
+            for x in app_state.EditorPage.viewed_files:
+                container.append(ft.Row([
+                    ft.Text(f'{x}', size=15, weight='bold'),
+                    ft.Text('Status:', size=13)
+                ], alignment="spaceBetween"))
+
+        return ft.Column(container)
+    
+    
     return ft.Container(
         content=ft.Column([
-            ft.Row([
-                ft.Text(app_state.EditorPage.viewed_files if app_state.EditorPage.viewed_files else 'Информация', size=20, weight='bold'),
-                ft.Text('Status: ', size=20)
-            ],
-            alignment="spaceBetween"),
-
+            modecheck(),
             ft.Divider(height=1),
             ft.Row(   # кнопки сверху
                 [
@@ -328,7 +343,7 @@ def distributionData():
             content=ft.Row([ft.Text("Выберете файл для просмотра информации", size=15)])
         )
     
-    if len(app_state.EditorPage.viewed_files) > 1:
+    elif app_state.EditorPage.unification_mode:
         return ft.Container(
             content=ft.Row([
                 ft.Text("Вы в режиме объединения файлов", size=15),
