@@ -33,8 +33,8 @@ def main(page_control: ft.Page):
         page_control.update()
 
     # Запуск асинхронных задач
-
     page_control.loop.create_task(mainApp())
+
 
 
     

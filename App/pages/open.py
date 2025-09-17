@@ -15,8 +15,12 @@ def open_directory_dialog():
     
     # Открываем диалог выбора директории
     directory = filedialog.askdirectory(title="Выберите папку")
+    
 
     if directory:  # Если папка выбрана
+        app_state.project_name = directory.split('/')[-1]
+        Path(f"./projects/{app_state.project_name}/data.json").mkdir(parents=True, exist_ok=True)
+
         app_state.global_path = directory
         app_state.files = [f for f in os.listdir(directory) if f.endswith('.mkv')]
         app_state.new_page(rout.Page_Home)
@@ -42,28 +46,12 @@ def projects_library(projects):
             ft.Row(buttonList)
         ])
 
-def create_project():
-    return ft.Column(
-        controls=[
-            ft.Text(f"Добро пожаловать в FLAME", size=30, weight="bold"),
-            ft.Text("Создайте свой первый проект!", size=16),
-            ft.ElevatedButton(
-                "Создать +",
-                on_click=lambda e: open_directory_dialog(), 
-            ),
-        ],
-        alignment="center",
-        horizontal_alignment="center",
-    )
-
 
 def projects_manage():
-    Path('./projectslib').mkdir(exist_ok=True)
-    projects = [f for f in os.listdir('./projectslib')]
-    if projects:
-        return projects_library(projects)
+    Path(f"./projects").mkdir(parents=True, exist_ok=True)
+    projects = [f for f in os.listdir('./projects')]
+    return projects_library(projects)
     
-    return create_project()
 
 
     

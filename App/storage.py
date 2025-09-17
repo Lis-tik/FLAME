@@ -7,7 +7,8 @@ class EditorPage:
     def __init__(self):
         self.info_mode = 'video'
         self.mediainfo_copy = None
-        self.viewed_file = None
+        self.viewed_files = []
+
         self.unification_mode = False
         
         self.debug = None
