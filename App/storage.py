@@ -1,7 +1,4 @@
 
-from src.media_info import Info
-
-
 
 class EditorPage:
     def __init__(self):
@@ -20,7 +17,7 @@ class EditorPage:
 class AppState:
     def __init__(self):
         #Общие данные
-        self._files  = []
+        self.files  = []
         self.page = None
 
         self.global_path = None
@@ -29,8 +26,8 @@ class AppState:
         self.AUDIO_FORMATS = ['.mkv', '.mka', 'mp4']
         self.SUBTITLES_FORMATS  = ['.srt', '.ass', '.vtt', '.sub', '.ttml', '.pgs']
 
-        self.InfoData = Info()
-        self.mediainfo_Original = None
+        self.InfoData = None
+        self._mediainfo_Original = None
 
         #HOME PAGE
         self.EditorPage = EditorPage()
@@ -46,17 +43,14 @@ class AppState:
 
 
     @property
-    def files(self):
-        return self._files
+    def mediainfo_Original(self):
+        return self._mediainfo_Original
 
-    @files.setter
-    def files(self, new_value):
-        self._files = new_value
-
-        self.mediainfo_Original = self.InfoData.start_getinfo(self._files, self.global_path)
+    @mediainfo_Original.setter
+    def mediainfo_Original(self, new_value):
+        self._mediainfo_Original = new_value
         self.EditorPage.mediainfo_copy = self.mediainfo_Original
-
-        # print(self.mediainfo_Original)
+        print(self.EditorPage.mediainfo_copy)
         
     
         

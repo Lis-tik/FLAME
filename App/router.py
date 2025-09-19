@@ -1,6 +1,6 @@
 
 from App.pages.open import projects_manage
-from App.pages.editor_page import get_editor_page
+from App.pages.editor.editor_page import get_editor_page
 from App.pages.multi_page import get_page_content
 from App.pages.Setting_converter import setting_converter
 

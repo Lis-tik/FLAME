@@ -1,7 +1,3 @@
-import ffmpeg
-
-
-
 
 def video_info(stream):
     data = {

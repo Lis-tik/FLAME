@@ -4,6 +4,7 @@ from App.storage import app_state
 import App.router as rout
 import os
 from pathlib import Path
+from App.src.media_info import start_getinfo
 
 
 
@@ -23,6 +24,7 @@ def open_directory_dialog():
 
         app_state.global_path = directory
         app_state.files = [f for f in os.listdir(directory) if f.endswith('.mkv')]
+        start_getinfo()
         app_state.new_page(rout.Page_Home)
         
 
