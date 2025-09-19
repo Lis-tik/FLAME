@@ -20,11 +20,11 @@ The application helps you create and manage projects, organize the working envir
 ### Requirements
 - Python 3.9+  
 - [ffmpeg](https://ffmpeg.org/)  
-- Qt (PyQt5 or PySide6)  
+- flet
 
 ### From source
 ```bash
-git clone https://github.com/username/mediacontainer-gui.git
-cd mediacontainer-gui
+git clone https://github.com/username/FLAME.git
+cd ./FLAME
 pip install -r requirements.txt
 python main.py
