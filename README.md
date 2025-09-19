@@ -24,7 +24,7 @@ The application helps you create and manage projects, organize the working envir
 
 ### From source
 ```bash
-git clone https://github.com/username/FLAME.git
+git clone https://github.com/Lis-tik/FLAME.git
 cd ./FLAME
 pip install -r requirements.txt
 python main.py
