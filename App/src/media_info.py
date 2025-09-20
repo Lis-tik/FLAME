@@ -20,23 +20,6 @@ def debug_info(instance):
 
 
 
-def edit_workspace():
-    print('Вы в режиме редактирования\nНажмите [ENTER] для выхода')
-    mode = int(input('Выберете номер медиа, которое хотите редактировать\nВведите (-1), чтобы выбрать ВСЕ медия\n:'))
-    correct = input('Внесите корректировки\n\nФормат: тип данных в медиа/номер дорожки/параметр/новое значение\nПример: audio/0/title/new_name\n:').split('/')
-
-    if mode == -1:
-        for x in range(len(self.info_main_lib[self.global_path])):
-            if correct[2]:
-                self.info_main_lib[x][correct[0]][int(correct[1])][correct[2]] = correct[3]
-            else:
-                del self.info_main_lib[x][correct[0]][int(correct[1])]
-    else:
-        self.info_main_lib[mode][correct[0]][int(correct[1])][correct[2]] = correct[3]
-
-
-
-
 
 def start_getinfo():
     info_main_lib = {}
@@ -74,17 +57,17 @@ def start_getinfo():
 
 
 def update_chanel(new_data):
-    for index, value in enumerate(new_data):
+    for index, value in enumerate(app_state.EditorPage.viewed_files):
         probe = ffmpeg.probe(new_data[index])
 
         for stream in probe['streams']:
             if stream['codec_type'] == 'audio':
-                new_audio_chanel = audio_info(stream, value)
-                app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[index]]['audio'].append(new_audio_chanel)
+                new_audio_chanel = audio_info(stream, new_data[index])
+                app_state.EditorPage.mediainfo_copy[value]['audio'].append(new_audio_chanel)
 
             if stream['codec_type'] == 'subtitle':
-                new_subtitle_chanel = subtitle_info(stream, value)
-                app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[index]]['subtitle'].append(new_subtitle_chanel)
+                new_subtitle_chanel = subtitle_info(stream, new_data[index])
+                app_state.EditorPage.mediainfo_copy[value]['subtitle'].append(new_subtitle_chanel)
 
 
 

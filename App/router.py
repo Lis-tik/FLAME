@@ -1,8 +1,10 @@
 
-from App.pages.open import projects_manage
+from App.pages.open.open import projects_manage
 from App.pages.editor.editor_page import get_editor_page
 from App.pages.multi_page import get_page_content
 from App.pages.Setting_converter import setting_converter
+from App.pages.navigation.navigation import navigation
+from App.pages.main.main import main
 
 
 
@@ -21,7 +23,9 @@ class Router:
         self.data = data
 
 
-Page_Open = Router(1, projects_manage, 'Создайте проект!')
-Page_Home = Router(2, get_editor_page, 'Домашняя страница')
-Page_setting_converter = Router(2, setting_converter, 'Настройки конвертера')
+Main = Router(0, main, 'Главная')
+Navigation = Router(1, navigation, 'Навигация')
+Projects = Router(2, projects_manage, 'Создайте проект!')
+Editor = Router(3, get_editor_page, 'Домашняя страница')
+Page_setting_converter = Router(4, setting_converter, 'Настройки конвертера')
 

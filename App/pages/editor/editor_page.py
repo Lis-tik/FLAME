@@ -1,7 +1,7 @@
 import flet as ft
 from App.storage import app_state
 import App.router as rout
-from App.pages.editor.control import UnificationButton, RuleButton, EditingInput, SampleMode, StatusCheck, StatusMediaFlag, ModeButton, addTrack
+from App.pages.editor.control import UnificationButton, RuleButton, EditingInput, SampleMode, StatusCheck, StatusMediaFlag, ModeButton, addTrack, LangDrop
 
         
 
@@ -37,7 +37,7 @@ def subtitleChannel(state, index):
             ]),
             ft.Row([
                 ft.Text(f"Язык субтитров:", size=15, weight='bold'),
-                ft.Text(f"{state['language']}", size=15),
+                LangDrop(state['language']),
             ]),
             ft.Row([
                 ft.Text(f"Формат:", size=15, weight='bold'),
@@ -68,7 +68,7 @@ def audioChannel(state, index):
             ]),
             ft.Row([
                 ft.Text(f"Язык аудиодорожки:", size=15, weight='bold'),
-                ft.Text(f"{state['language']}", size=15),
+                LangDrop(state['language']),
             ]),
             ft.Row([
                 ft.Text(f"Кодек аудиодорожки:", size=15, weight='bold'),
@@ -212,52 +212,16 @@ def distributionData():
         elif app_state.EditorPage.info_mode == 'subtitle':
             textField = subtitleChannel(state, index)
                 
-
         info_page.append(textField)
-
 
     return ft.Column(info_page)
 
 
 
-
-
-def navigation():
-    return ft.Row(  # Лучше адаптируется для мобильных устройств
-        controls=[
-            ft.ElevatedButton(
-                "Главная",
-                on_click=lambda e: app_state.new_page(rout.Page_Open),
-            ),
-            ft.ElevatedButton(
-                "Входные данные", 
-                on_click=lambda e: app_state.new_page(rout.Page_setting_converter),
-            ),
-            ft.ElevatedButton(
-                "Конвертер",
-                on_click=lambda e: app_state.new_page(rout.multipage(3)),
-            ),
-            ft.ElevatedButton(
-                "Выходные данные",
-                on_click=lambda e: app_state.new_page(rout.multipage(4)),
-            ),
-        ],
-        spacing=10,
-        run_spacing=10,  # Перенос на новую строку при нехватке места
-    )
-
-def Label():
-    return ft.Container(
-        content=ft.Text("FLAME", size=30, weight='bold'),
-        padding=5,
-    )
-
 def get_editor_page():
     return ft.Column(
         controls=[
-            Label(),
-            navigation(),
-            Information(),
+            Information()
         ],
         expand=True,
         spacing=20,

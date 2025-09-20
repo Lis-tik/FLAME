@@ -17,6 +17,8 @@ class EditorPage:
 class AppState:
     def __init__(self):
         #Общие данные
+        self.projects = None
+        
         self.files  = []
         self.page = None
 

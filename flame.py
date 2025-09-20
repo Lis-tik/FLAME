@@ -6,7 +6,7 @@ import asyncio
 
 
 def main(page_control: ft.Page):
-    app_state.new_page(rout.Page_Open)
+    app_state.new_page(rout.Main)
     
     # Инициализация заголовка
     page_control.title = app_state.page.title
@@ -29,6 +29,8 @@ def main(page_control: ft.Page):
     # Функция переключения страниц
     async def control():
         page_control.controls.clear()  # Очищаем текущий экран
+
+        page_control.add(rout.Navigation.link())
         page_control.add(app_state.page.link())
         page_control.update()
 

@@ -6,6 +6,26 @@ from tkinter import Tk, filedialog
 import os
 from App.src.media_info import update_chanel
 
+class LangDrop(ft.Dropdown):
+    def __init__(self, lang):
+        super().__init__()
+        self.options=[
+            ft.dropdown.Option("jpn", "Японский"),
+            ft.dropdown.Option("ru", "Русский"),
+            ft.dropdown.Option("eng", "Английский"),
+        ]
+        self.value = lang
+        self.Label = "Выберите язык"
+        self.hint_text = "Не выбрано!"
+        self.on_change = self.changeLang
+        self.border_color = ft.Colors.BLUE if self.value else ft.Colors.RED
+
+    def changeLang(self, e):
+        return
+
+
+
+
 
 class addTrack(ft.ElevatedButton):
     def __init__(self):
@@ -52,7 +72,7 @@ class addTrack(ft.ElevatedButton):
         if list_cop:  # Если папка выбрана
             update_chanel(list_cop)
 
-        app_state.new_page(rout.Page_Home)
+        app_state.new_page(rout.Editor)
             
 
 
@@ -72,9 +92,13 @@ class UnificationButton(ft.ElevatedButton):
         app_state.EditorPage.unification_mode = not(app_state.EditorPage.unification_mode)
 
         if not app_state.EditorPage.unification_mode:
-            app_state.EditorPage.viewed_files = []
+            app_state.EditorPage.viewed_files.clear()
+        else:
+            app_state.EditorPage.viewed_files.clear()
+            for edit in app_state.EditorPage.mediainfo_copy:
+                app_state.EditorPage.viewed_files.append(edit)
 
-        app_state.new_page(rout.Page_Home)
+        app_state.new_page(rout.Editor)
 
 
 class RuleButton(ft.ElevatedButton):
@@ -99,7 +123,7 @@ class RuleButton(ft.ElevatedButton):
         else:
             app_state.EditorPage.viewed_files = [self.text]
             
-        app_state.new_page(rout.Page_Home)
+        app_state.new_page(rout.Editor)
 
     
         
@@ -117,7 +141,8 @@ class EditingInput(ft.TextField):
 
     
     def handle_change(self, e):
-        app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][self.mode][self.index]['title'] = self.value
+        for edit in app_state.EditorPage.viewed_files:
+            app_state.EditorPage.mediainfo_copy[edit][self.mode][self.index]['title'] = self.value
         
         if not self.value:
             self.border_color = ft.Colors.RED
@@ -141,7 +166,7 @@ class SampleMode(ft.Checkbox):
             app_state.activeFilesHome.clear() 
             break
 
-        app_state.new_page(rout.Page_Home)
+        app_state.new_page(rout.Editor)
 
 
 class StatusCheck(ft.Checkbox):
@@ -153,7 +178,7 @@ class StatusCheck(ft.Checkbox):
 
     def SampleModeFunc(self, e):
         app_state.EditorPage.mediainfo_copy[self.file]['status'] = int(not(app_state.EditorPage.mediainfo_copy[self.file]['status']))
-        app_state.new_page(rout.Page_Home)
+        app_state.new_page(rout.Editor)
 
         
 
@@ -166,8 +191,9 @@ class StatusMediaFlag(ft.Checkbox):
         self.label = 'Дорожка будет включена в итоговый проект' if self.value else 'Дорожка исключена из итогового проекта'
 
     def dataCheck(self, e):
-        app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][self.index]['status'] = not(bool(app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][self.index]['status']))
-        app_state.new_page(rout.Page_Home)
+        for edit in app_state.EditorPage.viewed_files:
+            app_state.EditorPage.mediainfo_copy[edit][app_state.EditorPage.info_mode][self.index]['status'] = not(bool(app_state.EditorPage.mediainfo_copy[edit][app_state.EditorPage.info_mode][self.index]['status']))
+        app_state.new_page(rout.Editor)
 
         
      
@@ -189,6 +215,6 @@ class ModeButton(ft.ElevatedButton):
 
     def infoModeTool(self, e):
         app_state.EditorPage.info_mode = self.mode
-        app_state.new_page(rout.Page_Home)
+        app_state.new_page(rout.Editor)
 
 
