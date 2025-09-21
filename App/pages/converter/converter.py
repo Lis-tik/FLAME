@@ -1,13 +1,10 @@
 import flet as ft
 
-
-
-def main():
+def converter():
     return ft.Column(
         controls=[
-            ft.Text('Добро пожаловать в FLAME', size=20)
+            ft.Text('Конвертер', size=20)
         ],
         expand=True,
         spacing=20,
     )
-

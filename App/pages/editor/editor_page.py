@@ -2,6 +2,7 @@ import flet as ft
 from App.storage import app_state
 import App.router as rout
 from App.pages.editor.control import UnificationButton, RuleButton, EditingInput, SampleMode, StatusCheck, StatusMediaFlag, ModeButton, addTrack, LangDrop
+from App.src.ProfileRecording import saveChange
 
         
 
@@ -37,7 +38,7 @@ def subtitleChannel(state, index):
             ]),
             ft.Row([
                 ft.Text(f"Язык субтитров:", size=15, weight='bold'),
-                LangDrop(state['language']),
+                LangDrop(state['language'], index),
             ]),
             ft.Row([
                 ft.Text(f"Формат:", size=15, weight='bold'),
@@ -68,7 +69,7 @@ def audioChannel(state, index):
             ]),
             ft.Row([
                 ft.Text(f"Язык аудиодорожки:", size=15, weight='bold'),
-                LangDrop(state['language']),
+                LangDrop(state['language'], index),
             ]),
             ft.Row([
                 ft.Text(f"Кодек аудиодорожки:", size=15, weight='bold'),
@@ -219,6 +220,7 @@ def distributionData():
 
 
 def get_editor_page():
+    saveChange()
     return ft.Column(
         controls=[
             Information()

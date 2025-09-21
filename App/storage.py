@@ -27,13 +27,13 @@ class AppState:
         self.project_name = "Мой проект"
         self.AUDIO_FORMATS = ['.mkv', '.mka', 'mp4']
         self.SUBTITLES_FORMATS  = ['.srt', '.ass', '.vtt', '.sub', '.ttml', '.pgs']
+        self.LANGUAGE_LIST = ['jpn', 'eng', 'rus']
 
         self.InfoData = None
         self._mediainfo_Original = None
 
         #HOME PAGE
         self.EditorPage = EditorPage()
-
 
 
 

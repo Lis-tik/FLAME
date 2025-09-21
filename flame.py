@@ -6,21 +6,15 @@ import asyncio
 
 
 def main(page_control: ft.Page):
-    app_state.new_page(rout.Main)
-    
-    # Инициализация заголовка
-    page_control.title = app_state.page.title
-    page_control.update()  # ← Важно!
-
-    page_control.vertical_alignment = "center"
-    page_control.horizontal_alignment = "center"
+    app_state.new_page(rout.Introductory)
+    page_control.update()  
 
 
     async def mainApp():
-        while True: 
+        while True:  
             if app_state.transition:
-                await control()
                 page_control.title = app_state.page.title
+                await control()
                 app_state.transition = False
                 
             await asyncio.sleep(0.1)

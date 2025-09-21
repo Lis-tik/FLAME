@@ -16,7 +16,7 @@ def navigation():
                     padding=ft.padding.symmetric(horizontal=16, vertical=12),
                     shape=ft.RoundedRectangleBorder(radius=6),
                 ),
-                on_click=lambda e: app_state.new_page(rout.Main),
+                on_click=lambda e: app_state.new_page(rout.Introductory),
             ),
             ft.ElevatedButton(
                 content=ft.Row([
@@ -49,7 +49,7 @@ def navigation():
                     padding=ft.padding.symmetric(horizontal=16, vertical=12),
                     shape=ft.RoundedRectangleBorder(radius=6),
                 ),
-                on_click=lambda e: app_state.new_page(rout.multipage(3)),
+                on_click=lambda e: app_state.new_page(rout.Converter),
             ),
         ],
         spacing=8,

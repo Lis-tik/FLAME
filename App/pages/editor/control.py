@@ -7,21 +7,25 @@ import os
 from App.src.media_info import update_chanel
 
 class LangDrop(ft.Dropdown):
-    def __init__(self, lang):
+    def __init__(self, lang, index):
         super().__init__()
-        self.options=[
-            ft.dropdown.Option("jpn", "Японский"),
-            ft.dropdown.Option("ru", "Русский"),
-            ft.dropdown.Option("eng", "Английский"),
-        ]
         self.value = lang
         self.Label = "Выберите язык"
         self.hint_text = "Не выбрано!"
         self.on_change = self.changeLang
-        self.border_color = ft.Colors.BLUE if self.value else ft.Colors.RED
+        self.border_color = ft.Colors.BLUE if self.value in app_state.LANGUAGE_LIST else ft.Colors.RED
+        self.index = index
+        self.options = []
+        
+        for lang in app_state.LANGUAGE_LIST:
+            self.options.append(ft.dropdown.Option(lang))
+
 
     def changeLang(self, e):
-        return
+        for media in app_state.EditorPage.viewed_files:
+            app_state.EditorPage.mediainfo_copy[media][app_state.EditorPage.info_mode][self.index]['language'] = self.value
+
+        app_state.new_page(rout.Editor)
 
 
 
