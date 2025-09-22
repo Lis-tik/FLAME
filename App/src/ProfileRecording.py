@@ -4,6 +4,9 @@ from pathlib import Path
 from datetime import datetime
 
 def saveChange():
+    if not app_state.EditorPage.mediainfo_copy:
+        return
+    
     contentLibs = []
     for cont in app_state.EditorPage.mediainfo_copy:
         contentLibs.append(app_state.EditorPage.mediainfo_copy[cont])

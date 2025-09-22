@@ -21,7 +21,7 @@ def navigation():
             ft.ElevatedButton(
                 content=ft.Row([
                     ft.Icon(ft.Icons.MENU, size=16),
-                    ft.Text("Менеджер профилей", size=14),
+                    ft.Text("Менеджер проектов", size=14),
                 ], spacing=8),
                 style=ft.ButtonStyle(
                     padding=ft.padding.symmetric(horizontal=16, vertical=12),
