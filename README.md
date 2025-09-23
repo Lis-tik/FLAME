@@ -19,13 +19,6 @@ It allows you to create projects, edit metadata, manage tracks and subtitles, as
 
 ---
 
-## 📸 Screenshots
-
-> _(to be added later)_  
-Showcase the UI here to highlight usability.
-
----
-
 ## 🚀 Installation
 
 ### From source
