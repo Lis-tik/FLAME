@@ -1,6 +1,6 @@
-# FLAME (FFmpeg Library & Asset Management Envrequirement)
+# Muxon
 
-**FLAME** is a user-friendly graphical tool for managing media containers and preparing adaptive streaming content.  
+**Muxon** is a user-friendly graphical tool for managing media containers and preparing adaptive streaming content.  
 The application helps you create and manage projects, organize the working environment, and automate the generation of **DASH** and **HLS** manifests.
 
 ---
@@ -24,7 +24,7 @@ The application helps you create and manage projects, organize the working envir
 
 ### From source
 ```bash
-git clone https://github.com/Lis-tik/FLAME.git
-cd ./FLAME
+git clone https://github.com/Lis-tik/muxon.git
+cd muxon
 pip install -r requirements.txt
-python main.py
+python muxon.py
