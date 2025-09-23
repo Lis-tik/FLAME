@@ -23,6 +23,6 @@ It allows you to create projects, edit metadata, manage tracks and subtitles, as
 
 ### From source
 ```bash
-git clone https://github.com/yourusername/muxon.git
+git clone https://github.com/Lis-tik/muxon.git
 cd muxon
 pip install -r requirements.txt
