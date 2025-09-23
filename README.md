@@ -1,30 +1,35 @@
-# Muxon
+# 🎬 Muxon
 
-**Muxon** is a user-friendly graphical tool for managing media containers and preparing adaptive streaming content.  
-The application helps you create and manage projects, organize the working environment, and automate the generation of **DASH** and **HLS** manifests.
+**Muxon** is a cross-platform GUI tool for convenient interaction with media files.  
+It allows you to create projects, edit metadata, manage tracks and subtitles, as well as configure and monitor the conversion process (powered by **FFmpeg**).  
 
----
-
-## 🚀 Features
-- Manage and validate media containers.  
-- Create and structure media projects.  
-- Build a working environment for media processing.  
-- Prepare **ABR (Adaptive Bitrate)** content.  
-- Generate and format **XML manifests** for DASH and HLS.  
-- Simple and intuitive graphical interface.  
+> While initially focused on DASH and HLS, Muxon is designed to be a universal media processing tool.
 
 ---
 
-## 📦 Installation
+## ✨ Features
 
-### Requirements
-- Python 3.9+  
-- [ffmpeg](https://ffmpeg.org/)  
-- flet
+- 📂 Create projects and organize media files  
+- 🎵 Add/remove audio & video tracks, subtitles  
+- 📝 Edit metadata  
+- ⚙️ Flexible converter configuration (**FFmpeg**)  
+- 📊 Conversion progress monitoring  
+- 🧩 Manifest generation and management (DASH/HLS)  
+- 🔮 Future support for other formats  
+
+---
+
+## 📸 Screenshots
+
+> _(to be added later)_  
+Showcase the UI here to highlight usability.
+
+---
+
+## 🚀 Installation
 
 ### From source
 ```bash
-git clone https://github.com/Lis-tik/muxon.git
+git clone https://github.com/yourusername/muxon.git
 cd muxon
 pip install -r requirements.txt
-python muxon.py
