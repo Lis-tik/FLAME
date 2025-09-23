@@ -1,5 +1,13 @@
 
 
+
+class ConvertConstructor:
+    def __init__(self):
+        self.audio = None
+        self.video = None
+        self.subtitle = None
+        self.quality = None
+
 class EditorPage:
     def __init__(self):
         self.info_mode = 'video'
@@ -10,8 +18,6 @@ class EditorPage:
         
         self.debug = None
         self.DEBUG_COLORS = []
-
-
 
 
 class AppState:

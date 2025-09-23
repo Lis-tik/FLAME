@@ -43,13 +43,13 @@ def navigation():
             ft.ElevatedButton(
                 content=ft.Row([
                     ft.Icon(ft.Icons.SYNC, size=16),
-                    ft.Text("Конвертер", size=14),
+                    ft.Text("Процесс", size=14),
                 ], spacing=8),
                 style=ft.ButtonStyle(
                     padding=ft.padding.symmetric(horizontal=16, vertical=12),
                     shape=ft.RoundedRectangleBorder(radius=6),
                 ),
-                on_click=lambda e: app_state.new_page(rout.Converter),
+                on_click=lambda e: app_state.new_page(rout.monitoring),
             ),
         ],
         spacing=8,

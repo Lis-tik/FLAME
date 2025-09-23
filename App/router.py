@@ -2,7 +2,7 @@
 from App.pages.open.open import projects_manage
 from App.pages.editor.editor_page import get_editor_page
 from App.pages.multi_page import get_page_content
-from App.pages.converter.converter import converter
+from App.pages.monitoring.monitoring import monitoring
 from App.pages.navigation.navigation import navigation
 from App.pages.introductory.introductory import introductory
 
@@ -27,5 +27,5 @@ Introductory = Router(0, introductory, 'Главная')
 Navigation = Router(1, navigation, 'Навигация')
 Projects = Router(2, projects_manage, 'Менеджер проектов')
 Editor = Router(3, get_editor_page, 'Редактор профиля')
-Converter = Router(4, converter, 'Настройки конвертера')
+Monitoring = Router(4, monitoring, 'Мониторинг преобразования')
 
