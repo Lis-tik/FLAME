@@ -31,6 +31,19 @@ class LangDrop(ft.Dropdown):
 
 
 
+class actTrack(ft.ElevatedButton):
+    def __init__(self, text):
+        super().__init__()
+        self.text = text
+        self.on_click = self.tracknum
+
+    def tracknum(self):
+        app_state.EditorPage.viewed_track = self.text
+        app_state.new_page(rout.Editor)
+
+
+
+
 class addTrack(ft.ElevatedButton):
     def __init__(self):
         super().__init__()

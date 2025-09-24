@@ -13,6 +13,7 @@ class EditorPage:
         self.info_mode = 'video'
         self.mediainfo_copy = None
         self.viewed_files = []
+        self.viewed_track = None
 
         self.unification_mode = False
         

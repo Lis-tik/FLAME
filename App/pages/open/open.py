@@ -23,7 +23,7 @@ def open_directory_dialog():
 
     if directory:  # Если папка выбрана
         app_state.project_name = directory.split('/')[-1]
-        Path(f"./projects/{app_state.project_name}/data.json").mkdir(parents=True, exist_ok=True)
+        Path(f"./UserData/projects/{app_state.project_name}").mkdir(parents=True, exist_ok=True)
 
         app_state.global_path = directory
         app_state.files = [f for f in os.listdir(directory) if f.endswith('.mkv')]
@@ -59,8 +59,8 @@ def projects_library():
 
 
 def projects_manage():
-    Path(f"./projects").mkdir(parents=True, exist_ok=True)
-    app_state.projects = [f for f in os.listdir('./projects')]
+    Path(f"./UserData/projects").mkdir(parents=True, exist_ok=True)
+    app_state.projects = [f for f in os.listdir('./UserData/projects')]
     return projects_library()
     
 

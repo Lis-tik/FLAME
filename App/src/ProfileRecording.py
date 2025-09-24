@@ -18,6 +18,6 @@ def saveChange():
     }
 
 
-    file_path = Path(f"./projects/{app_state.project_name}/data.json")
+    file_path = Path(f"./UserData/projects/{app_state.project_name}/data.json")
     with open(file_path, 'w', encoding='utf-8') as file:
         json.dump(data, file, ensure_ascii=False, indent=4)

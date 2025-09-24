@@ -1,7 +1,7 @@
 import flet as ft
 from App.storage import app_state
 import App.router as rout
-from App.pages.editor.control import UnificationButton, RuleButton, EditingInput, SampleMode, StatusCheck, StatusMediaFlag, ModeButton, addTrack, LangDrop
+from App.pages.editor.control import UnificationButton, RuleButton, EditingInput, SampleMode, StatusCheck, StatusMediaFlag, ModeButton, addTrack, LangDrop, actTrack
 from App.src.ProfileRecording import saveChange
 
         
@@ -186,36 +186,15 @@ def distributionData():
             content=ft.Row([ft.Text("Выберете файл для просмотра информации", size=15)])
         )
     
-    # elif app_state.EditorPage.unification_mode:
-    #     return ft.Container(
-    #         content=ft.Row([
-    #             ft.Text("Вы в режиме объединения файлов", size=15),
-    #             ft.Text(f'{app_state.EditorPage.viewed_files}')
-    #             ])
-    #     )
+    for index, media in enumerate(app_state.EditorPage.mediainfo_copy):
+        state = app_state.EditorPage.mediainfo_copy[-1][app_state][]
     
-    info_page = []
-
-    info_page.append(addTrack())
-    info_page.append(ft.Divider(height=1))
-
-
-
-    
-
-    for index, state in enumerate(app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode]):
-        if app_state.EditorPage.info_mode == 'audio':
-            textField = audioChannel(state, index)
-
-        elif app_state.EditorPage.info_mode == 'video':
-            textField = videoChannel(state)
-        
-        elif app_state.EditorPage.info_mode == 'subtitle':
-            textField = subtitleChannel(state, index)
-                
-        info_page.append(textField)
-
-    return ft.Column(info_page)
+    most = ft.Row([
+        # ft.Column(aud),
+        ft.Column(audioChannel())
+    ])
+    # info_page = []
+    return ft.Column()
 
 
 
