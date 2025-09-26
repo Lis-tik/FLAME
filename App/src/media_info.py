@@ -31,9 +31,9 @@ def start_getinfo():
             'path': app_state.global_path,
             'index': x+1,
             'status': 1,
-            'video': [],
-            'audio': [],
-            'subtitle': []
+            'video': {},
+            'audio': {},
+            'subtitle': {}
             }
     
         probe = ffmpeg.probe(f'{app_state.global_path}/{name_path}')
@@ -41,16 +41,23 @@ def start_getinfo():
 
             if stream['codec_type'] == 'video':
                 video_data_add = video_info(stream)
-                info_main_lib[name_path]['video'].append(video_data_add)
+                if video_data_add['uid'] in info_main_lib[name_path]['video']:
+                    return
+                info_main_lib[name_path]['video'][video_data_add['uid']] = video_data_add['data']
                     
 
             if stream['codec_type'] == 'audio':
                 audio_data_add = audio_info(stream)
-                info_main_lib[name_path]['audio'].append(audio_data_add)
+                if audio_data_add['uid'] in info_main_lib[name_path]['audio']:
+                    return
+                info_main_lib[name_path]['audio'][audio_data_add['uid']] = audio_data_add['data']
 
             if stream['codec_type'] == 'subtitle':
                 subtitle_data_add = subtitle_info(stream)
-                info_main_lib[name_path]['subtitle'].append(subtitle_data_add)
+                if subtitle_data_add['uid'] in info_main_lib[name_path]['subtitle']:
+                    return
+                
+                info_main_lib[name_path]['subtitle'][subtitle_data_add['uid']] = subtitle_data_add['data']
 
     app_state.mediainfo_Original = info_main_lib
 

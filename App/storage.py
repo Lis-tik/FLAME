@@ -20,6 +20,14 @@ class EditorPage:
         self.debug = None
         self.DEBUG_COLORS = []
 
+    @property
+    def mediainfo_copy(self):
+        return self._mediainfo_copy
+
+    @mediainfo_copy.setter
+    def mediainfo_copy(self, new_value):
+        self._mediainfo_copy = new_value
+
 
 class AppState:
     def __init__(self):

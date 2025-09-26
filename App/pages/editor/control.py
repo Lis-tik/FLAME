@@ -32,13 +32,13 @@ class LangDrop(ft.Dropdown):
 
 
 class actTrack(ft.ElevatedButton):
-    def __init__(self, text):
+    def __init__(self, uid):
         super().__init__()
-        self.text = text
+        self.text = app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][uid]['title'] if app_state.EditorPage.info_mode != 'video' else 'video'
         self.on_click = self.tracknum
 
     def tracknum(self):
-        app_state.EditorPage.viewed_track = self.text
+        app_state.EditorPage.viewed_track = self.uid
         app_state.new_page(rout.Editor)
 
 

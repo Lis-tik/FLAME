@@ -4,7 +4,6 @@ import App.router as rout
 from App.pages.editor.control import UnificationButton, RuleButton, EditingInput, SampleMode, StatusCheck, StatusMediaFlag, ModeButton, addTrack, LangDrop, actTrack
 from App.src.ProfileRecording import saveChange
 
-        
 
 def videoChannel(state):
     return ft.Container(
@@ -55,7 +54,9 @@ def subtitleChannel(state, index):
 
 
 
-def audioChannel(state, index):
+def audioChannel(index):
+    state = app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_track]
+
     return ft.Container(
         ft.Column([
             StatusMediaFlag(index),
@@ -186,15 +187,17 @@ def distributionData():
             content=ft.Row([ft.Text("Выберете файл для просмотра информации", size=15)])
         )
     
-    for index, media in enumerate(app_state.EditorPage.mediainfo_copy):
-        state = app_state.EditorPage.mediainfo_copy[-1][app_state][]
-    
-    most = ft.Row([
-        # ft.Column(aud),
-        ft.Column(audioChannel())
-    ])
-    # info_page = []
-    return ft.Column()
+    content=[]
+    for tracks in app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode]:
+        content.append(actTrack(str(tracks)))
+
+
+    return ft.Container(
+        ft.Row([
+            ft.Column(content)
+            # ft.Column(audioChannel())
+        ])
+    )
 
 
 

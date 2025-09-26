@@ -1,3 +1,4 @@
+import hashlib
 
 def video_info(stream):
     data = {
@@ -8,7 +9,9 @@ def video_info(stream):
         'is_avc': int('avc' in stream.get('codec_name', '').lower()),
         'status': 1
     }
-    return data
+
+    uid = hashlib.md5(str(data).encode()).hexdigest()
+    return {'data': data, 'uid': uid}
     
 
 def audio_info(stream, path=0):
@@ -25,7 +28,9 @@ def audio_info(stream, path=0):
         'status': 1,
         'path': path
     }
-    return data
+
+    uid = hashlib.md5(str(data).encode()).hexdigest()
+    return {'data': data, 'uid': uid}
 
 def subtitle_info(stream, path=0):
     data = {
@@ -40,4 +45,5 @@ def subtitle_info(stream, path=0):
         'status': 1,
         'path': path
     }
-    return data
+    uid = hashlib.md5(str(data).encode()).hexdigest()
+    return {'data': data, 'uid': uid}
