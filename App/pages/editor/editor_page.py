@@ -2,10 +2,7 @@ import flet as ft
 from App.storage import app_state
 import App.router as rout
 from App.pages.editor.control import UnificationButton, RuleButton, EditingInput, SampleMode, StatusCheck, StatusMediaFlag, ModeButton, addTrack, LangDrop, actTrack
-from App.src.ProfileRecording import saveChange
-
-
-from App.src.designConv import initialization_profiles
+from App.src.DataControl import saveChange
 
 
 def modeCheck():
@@ -43,7 +40,7 @@ def videoChannel():
 
 
             ft.Text('Параметры конвертера', size=18, weight='bold'),
-            ft.ElevatedButton('Доступные профили', on_click=lambda e: initialization_profiles())
+            ft.ElevatedButton('Доступные профили')
         ]),
         bgcolor=ft.Colors.TRANSPARENT if int(app_state.EditorPage.viewed_track['status']) else ft.Colors.BLACK12
     )

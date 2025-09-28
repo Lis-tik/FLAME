@@ -5,7 +5,7 @@ import App.router as rout
 import os
 from pathlib import Path
 from App.src.media_info import start_getinfo
-from App.src.ProfileRecording import saveChange
+from App.src.DataControl import saveChange
 
 from App.pages.open.control import ProjManageContainer
 
