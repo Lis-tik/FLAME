@@ -12,27 +12,31 @@ class EditorPage:
     def __init__(self):
         self.info_mode = 'video'
         self.mediainfo_copy = None
+
         self.viewed_files = []
         self.viewed_track = None
-
+        self.viewed_uid = None
         self.unification_mode = False
         
         self.debug = None
         self.DEBUG_COLORS = []
 
     @property
-    def mediainfo_copy(self):
-        return self._mediainfo_copy
+    def info_mode(self):
+        return self._info_mode
 
-    @mediainfo_copy.setter
-    def mediainfo_copy(self, new_value):
-        self._mediainfo_copy = new_value
+    @info_mode.setter
+    def info_mode(self, new_value):
+        print(new_value)
+        self._info_mode = new_value
+        self.viewed_uid = None
 
 
 class AppState:
     def __init__(self):
         #Общие данные
         self.projects = None
+        self.page_control = None
         
         self.files  = []
         self.page = None
@@ -44,11 +48,14 @@ class AppState:
         self.SUBTITLES_FORMATS  = ['.srt', '.ass', '.vtt', '.sub', '.ttml', '.pgs']
         self.LANGUAGE_LIST = ['jpn', 'eng', 'rus']
 
+        self.CONVERT_PROFILES = {}
+
         self.InfoData = None
         self._mediainfo_Original = None
 
         #HOME PAGE
         self.EditorPage = EditorPage()
+
 
 
 
@@ -67,7 +74,7 @@ class AppState:
     def mediainfo_Original(self, new_value):
         self._mediainfo_Original = new_value
         self.EditorPage.mediainfo_copy = self.mediainfo_Original
-        print(self.EditorPage.mediainfo_copy)
+
         
     
         

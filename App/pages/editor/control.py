@@ -6,15 +6,26 @@ from tkinter import Tk, filedialog
 import os
 from App.src.media_info import update_chanel
 
+
+class ConvertProfileDrop(ft.Dropdown):
+    def __init__(self):
+        super().__init__()
+        self.value = None
+        self.options = []
+        self.on_change = self.changeProf
+
+        for lang in app_state.LANGUAGE_LIST:
+            self.options.append(ft.dropdown.Option(lang))
+
+
 class LangDrop(ft.Dropdown):
-    def __init__(self, lang, index):
+    def __init__(self, lang):
         super().__init__()
         self.value = lang
         self.Label = "Выберите язык"
         self.hint_text = "Не выбрано!"
         self.on_change = self.changeLang
         self.border_color = ft.Colors.BLUE if self.value in app_state.LANGUAGE_LIST else ft.Colors.RED
-        self.index = index
         self.options = []
         
         for lang in app_state.LANGUAGE_LIST:
@@ -23,7 +34,7 @@ class LangDrop(ft.Dropdown):
 
     def changeLang(self, e):
         for media in app_state.EditorPage.viewed_files:
-            app_state.EditorPage.mediainfo_copy[media][app_state.EditorPage.info_mode][self.index]['language'] = self.value
+            app_state.EditorPage.mediainfo_copy[media][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]['language'] = self.value
 
         app_state.new_page(rout.Editor)
 
@@ -32,13 +43,29 @@ class LangDrop(ft.Dropdown):
 
 
 class actTrack(ft.ElevatedButton):
-    def __init__(self, uid):
-        super().__init__()
-        self.text = app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][uid]['title'] if app_state.EditorPage.info_mode != 'video' else 'video'
+    def __init__(self, _uid):
+        self._uid = _uid
+        super().__init__(expand=True)
+        self.text = app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][_uid]['title'] if app_state.EditorPage.info_mode != 'video' else 'video'
         self.on_click = self.tracknum
 
-    def tracknum(self):
-        app_state.EditorPage.viewed_track = self.uid
+        self.content = ft.Column(
+            controls=[
+                ft.Text(self.text, size=15),
+                ft.Text(_uid, size=10, color=ft.Colors.GREY),
+            ],
+            spacing=0,
+            tight=True
+        )
+
+
+        self.style = ft.ButtonStyle(
+            shape=ft.RoundedRectangleBorder(radius=1),
+            bgcolor=(ft.Colors.GREY_300 if self._uid == app_state.EditorPage.viewed_uid else ft.Colors.WHITE),
+        )
+
+    def tracknum(self, e):
+        app_state.EditorPage.viewed_uid = self._uid
         app_state.new_page(rout.Editor)
 
 
@@ -147,11 +174,10 @@ class RuleButton(ft.ElevatedButton):
 
 
 class EditingInput(ft.TextField):
-    def __init__(self, value, index, mode):
+    def __init__(self):
         super().__init__()
-        self.value = value
-        self.mode = mode 
-        self.index = index
+        self.state = app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]
+        self.value = self.state['title']
         self.border_color = ft.Colors.BLUE if self.value else ft.Colors.RED
         self.hint_text = 'Поле должно быть заполнено!'
         self.on_change = self.handle_change
@@ -159,7 +185,7 @@ class EditingInput(ft.TextField):
     
     def handle_change(self, e):
         for edit in app_state.EditorPage.viewed_files:
-            app_state.EditorPage.mediainfo_copy[edit][self.mode][self.index]['title'] = self.value
+            app_state.EditorPage.mediainfo_copy[edit][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]['title'] = self.value
         
         if not self.value:
             self.border_color = ft.Colors.RED
@@ -200,16 +226,15 @@ class StatusCheck(ft.Checkbox):
         
 
 class StatusMediaFlag(ft.Checkbox):
-    def __init__(self, index):
+    def __init__(self, _uid):
         super().__init__()
-        self.index = index
+        self._uid = _uid
         self.on_change = self.dataCheck
-        self.value = bool(int(app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][self.index]['status']))
-        self.label = 'Дорожка будет включена в итоговый проект' if self.value else 'Дорожка исключена из итогового проекта'
+        self.value = bool(int(app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][self._uid]['status']))
 
     def dataCheck(self, e):
         for edit in app_state.EditorPage.viewed_files:
-            app_state.EditorPage.mediainfo_copy[edit][app_state.EditorPage.info_mode][self.index]['status'] = not(bool(app_state.EditorPage.mediainfo_copy[edit][app_state.EditorPage.info_mode][self.index]['status']))
+            app_state.EditorPage.mediainfo_copy[edit][app_state.EditorPage.info_mode][self._uid]['status'] = not(bool(app_state.EditorPage.mediainfo_copy[edit][app_state.EditorPage.info_mode][self._uid]['status']))
         app_state.new_page(rout.Editor)
 
         

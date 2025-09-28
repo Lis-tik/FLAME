@@ -49,7 +49,7 @@ def navigation():
                     padding=ft.padding.symmetric(horizontal=16, vertical=12),
                     shape=ft.RoundedRectangleBorder(radius=6),
                 ),
-                on_click=lambda e: app_state.new_page(rout.monitoring),
+                on_click=lambda e: app_state.new_page(rout.Monitoring),
             ),
         ],
         spacing=8,

@@ -6,6 +6,9 @@ import asyncio
 
 
 def main(page_control: ft.Page):
+    page_control.theme_mode = ft.ThemeMode.LIGHT
+    app_state.page_control = page_control
+
     app_state.new_page(rout.Introductory)
     page_control.update()  
 

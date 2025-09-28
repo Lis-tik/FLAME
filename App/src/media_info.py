@@ -70,11 +70,11 @@ def update_chanel(new_data):
         for stream in probe['streams']:
             if stream['codec_type'] == 'audio':
                 new_audio_chanel = audio_info(stream, new_data[index])
-                app_state.EditorPage.mediainfo_copy[value]['audio'].append(new_audio_chanel)
+                app_state.EditorPage.mediainfo_copy[value]['audio'][new_audio_chanel['uid']] = new_audio_chanel['data']
 
             if stream['codec_type'] == 'subtitle':
                 new_subtitle_chanel = subtitle_info(stream, new_data[index])
-                app_state.EditorPage.mediainfo_copy[value]['subtitle'].append(new_subtitle_chanel)
+                app_state.EditorPage.mediainfo_copy[value]['subtitle'][new_subtitle_chanel['uid']] = new_subtitle_chanel['data']
 
 
 
