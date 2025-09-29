@@ -1,24 +1,9 @@
 import ffmpeg
-from App.src.Metadata_Receiving import video_info, audio_info, subtitle_info
+from App.src.projectsControl.Metadata_Receiving import video_info, audio_info, subtitle_info
 from App.storage import app_state
-
-def debug_info(instance):
-    debug_messages = ''
-
-    for file in instance:
-        observed_list = {}
-        for audio in instance[file]['audio']:
-            if not audio['title']:
-                debug_messages += (f'Аудиодорожка [{audio['index']}] не имеет описания\n')
-            else:
-                observed_list.setdefault(audio['title'], []).append(audio['index'])
-                if len(observed_list[audio['title']]) > 1:
-                    debug_messages += (f'Аудиодорожки [{observed_list[audio['title']]}] имеют одинаковое описание!')
-
-    return debug_messages
-            
-
-
+import json
+from pathlib import Path
+from datetime import datetime
 
 
 def start_getinfo():
@@ -63,7 +48,7 @@ def start_getinfo():
 
 
 
-def update_chanel(new_data):
+def add_track(new_data):
     for index, value in enumerate(app_state.EditorPage.viewed_files):
         probe = ffmpeg.probe(new_data[index])
 
@@ -83,72 +68,21 @@ def update_chanel(new_data):
 
 
 
+def saveChange():
+    if not app_state.EditorPage.mediainfo_copy:
+        return
+    
+    contentLibs = []
+    for cont in app_state.EditorPage.mediainfo_copy:
+        contentLibs.append(app_state.EditorPage.mediainfo_copy[cont])
+
+    data = {
+        "name": app_state.project_name,
+        "changeData": str(datetime.now()),
+        "content": contentLibs
+    }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-    def summary_data(self):
-        summary_message = f'Всего файлов: {len(self.info_main_lib)}\n'
-
-        pass_role = self.info_main_lib
-        for x in range(len(pass_role)):
-
-            pth = pass_role[x]
-
-            summary_message += f'{x+1}.{pth['name']}: \n'
-
-            summary_message += 'video: '
-            for y in pth['video']:
-                summary_message += f'{y['width']}x{y['height']}; pix_fmt: {y['pix_fmt']}'
-
-            summary_message += '\naudio: \n'
-
-            
-            index = {}
-            for z in range(len(pth['audio'])):
-                cont = pth['audio'][z]
-
-                if cont['path'] in index:
-                    index[cont['path']] += 1
-                else:
-                    index[cont['path']] = 0
-
-                cont['index'] = index[cont['path']]
-
-                summary_message += f'--{z}. title: {cont['title']}; language: {cont['language']}; channel number: {cont['index']}; codec_name: {cont['codec_name']}; channels: {cont['channels']}; path: {cont['path']}\n'
-
-            summary_message += 'subtitle: \n'
-            for j in range(len(pth['subtitle'])):
-                cont = pth['subtitle'][j]
-                summary_message += f'--{j}. title: {cont['title']}; language: {cont['language']}; format: {cont['format']}; path: {cont['path']}\n'
-
-            summary_message += '\n'
-            
-        return summary_message
-
-                
-
-
-
-
-
-
-
-
-
-
+    file_path = Path(f"./UserData/projects/{app_state.project_name}/data.json")
+    with open(file_path, 'w', encoding='utf-8') as file:
+        json.dump(data, file, ensure_ascii=False, indent=4)

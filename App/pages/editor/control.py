@@ -4,7 +4,7 @@ from App.storage import app_state
 import App.router as rout
 from tkinter import Tk, filedialog
 import os
-from App.src.media_info import update_chanel
+from App.src.projectsControl.DataControl import add_track
 
 
 class ConvertProfileDrop(ft.Dropdown):
@@ -114,7 +114,7 @@ class addTrack(ft.ElevatedButton):
 
 
         if list_cop:  # Если папка выбрана
-            update_chanel(list_cop)
+            add_track(list_cop)
 
         app_state.new_page(rout.Editor)
             

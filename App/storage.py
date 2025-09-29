@@ -1,12 +1,6 @@
 
 
 
-class ConvertConstructor:
-    def __init__(self):
-        self.audio = None
-        self.video = None
-        self.subtitle = None
-        self.quality = None
 
 class EditorPage:
     def __init__(self):
@@ -48,7 +42,7 @@ class AppState:
         self.SUBTITLES_FORMATS  = ['.srt', '.ass', '.vtt', '.sub', '.ttml', '.pgs']
         self.LANGUAGE_LIST = ['jpn', 'eng', 'rus']
 
-        self.CONVERT_PROFILES = {}
+        self.CONVERT_PROFILES = []
 
         self.InfoData = None
         self._mediainfo_Original = None
