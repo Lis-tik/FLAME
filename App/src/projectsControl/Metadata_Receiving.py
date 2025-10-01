@@ -1,4 +1,6 @@
-import hashlib
+
+
+
 
 def video_info(stream):
     data = {
@@ -6,12 +8,13 @@ def video_info(stream):
         'height': stream.get('height'),
         'pix_fmt': stream.get('pix_fmt', 'unknown'),
         'profile': stream.get('profile', 'unknown'),
-        'is_avc': int('avc' in stream.get('codec_name', '').lower()),
+        'nb_frames': stream.get('nb_frames', 'unknown'),
+        'bit_rate': stream.get('bit_rate', 'unknown'),
+        'r_frame_rate': eval(stream.get("r_frame_rate", 'unknown')),
+        'codec_name': stream.get('codec_name', 'unknown'),
         'status': 1
     }
-
-    uid = hashlib.md5(str(data).encode()).hexdigest()
-    return {'data': data, 'uid': uid}
+    return data
     
 
 def audio_info(stream, path=0):
@@ -28,9 +31,7 @@ def audio_info(stream, path=0):
         'status': 1,
         'path': path
     }
-
-    uid = hashlib.md5(str(data).encode()).hexdigest()
-    return {'data': data, 'uid': uid}
+    return data
 
 def subtitle_info(stream, path=0):
     data = {
@@ -45,5 +46,4 @@ def subtitle_info(stream, path=0):
         'status': 1,
         'path': path
     }
-    uid = hashlib.md5(str(data).encode()).hexdigest()
-    return {'data': data, 'uid': uid}
+    return data

@@ -25,8 +25,10 @@ def open_directory_dialog():
         app_state.project_name = directory.split('/')[-1]
         Path(f"./UserData/projects/{app_state.project_name}").mkdir(parents=True, exist_ok=True)
 
-        app_state.global_path = directory
-        app_state.files = [f for f in os.listdir(directory) if f.endswith('.mkv')]
+
+        app_state.viewed_project = app_state.project_name
+        app_state.EditorPage.global_path = directory
+        app_state.EditorPage.files = [f for f in os.listdir(directory) if f.endswith('.mkv')]
         start_getinfo()
         saveChange()
         app_state.new_page(rout.Editor)

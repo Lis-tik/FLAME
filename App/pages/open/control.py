@@ -1,4 +1,7 @@
 import flet as ft
+import App.router as rout
+from App.src.projectsControl.DataControl import unpackingData
+from App.storage import app_state
 
 class ProjManageContainer(ft.Container):
     def __init__(self, data):
@@ -6,7 +9,7 @@ class ProjManageContainer(ft.Container):
         self.data = data
         self.content=ft.Row(
             controls=[
-                ft.Icon(ft.Icons.SETTINGS, size=24, color=ft.Colors.BLUE_700),
+                ft.Icon(ft.Icons.EDIT, size=24, color=ft.Colors.BLUE_700),
                 ft.Column(
                     controls=[
                         ft.Text(self.data, 
@@ -28,4 +31,6 @@ class ProjManageContainer(ft.Container):
         self.on_click = self.projectRule
 
     def projectRule(self, e):
-        print(self.data)
+        unpackingData(self.data)
+        app_state.viewed_project = self.data
+        app_state.new_page(rout.Editor)

@@ -5,7 +5,7 @@ from App.storage import app_state
 
 
 def initialization_profiles():
-    Path(f"./UserData/projects").mkdir(parents=True, exist_ok=True)
+    Path(f"./UserData/ffmpegProfiles").mkdir(parents=True, exist_ok=True)
 
     profiles_list = [f for f in os.listdir('./UserData/ffmpegProfiles')]
     for profile in profiles_list:

@@ -4,7 +4,7 @@ from App.storage import app_state
 import App.router as rout
 from tkinter import Tk, filedialog
 import os
-from App.src.projectsControl.DataControl import add_track
+from App.src.projectsControl.DataControl import add_track, dataEdit
 
 
 class ConvertProfileDrop(ft.Dropdown):
@@ -33,9 +33,7 @@ class LangDrop(ft.Dropdown):
 
 
     def changeLang(self, e):
-        for media in app_state.EditorPage.viewed_files:
-            app_state.EditorPage.mediainfo_copy[media][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]['language'] = self.value
-
+        dataEdit('language', self.value)
         app_state.new_page(rout.Editor)
 
 
@@ -46,7 +44,7 @@ class actTrack(ft.ElevatedButton):
     def __init__(self, _uid):
         self._uid = _uid
         super().__init__(expand=True)
-        self.text = app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][_uid]['title'] if app_state.EditorPage.info_mode != 'video' else 'video'
+        self.text = app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][_uid]['title'] if app_state.EditorPage.info_mode != 'video' else 'video'
         self.on_click = self.tracknum
 
         self.content = ft.Column(
@@ -139,7 +137,7 @@ class UnificationButton(ft.ElevatedButton):
             app_state.EditorPage.viewed_files.clear()
         else:
             app_state.EditorPage.viewed_files.clear()
-            for edit in app_state.EditorPage.mediainfo_copy:
+            for edit in app_state.EditorPage.mediainfo:
                 app_state.EditorPage.viewed_files.append(edit)
 
         app_state.new_page(rout.Editor)
@@ -147,7 +145,7 @@ class UnificationButton(ft.ElevatedButton):
 
 class RuleButton(ft.ElevatedButton):
     def __init__(self, text):
-        super().__init__()
+        super().__init__(expand=True)
         self.text = text
         self.on_click = self.modeFunc
 
@@ -176,7 +174,7 @@ class RuleButton(ft.ElevatedButton):
 class EditingInput(ft.TextField):
     def __init__(self):
         super().__init__()
-        self.state = app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]
+        self.state = app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]
         self.value = self.state['title']
         self.border_color = ft.Colors.BLUE if self.value else ft.Colors.RED
         self.hint_text = 'Поле должно быть заполнено!'
@@ -184,8 +182,7 @@ class EditingInput(ft.TextField):
 
     
     def handle_change(self, e):
-        for edit in app_state.EditorPage.viewed_files:
-            app_state.EditorPage.mediainfo_copy[edit][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]['title'] = self.value
+        dataEdit('title', self.value)
         
         if not self.value:
             self.border_color = ft.Colors.RED
@@ -217,10 +214,10 @@ class StatusCheck(ft.Checkbox):
         super().__init__()
         self.file = file
         self.on_change = self.SampleModeFunc
-        self.value = bool(app_state.EditorPage.mediainfo_copy[self.file]['status']) 
+        self.value = bool(app_state.EditorPage.mediainfo[self.file]['status']) 
 
     def SampleModeFunc(self, e):
-        app_state.EditorPage.mediainfo_copy[self.file]['status'] = int(not(app_state.EditorPage.mediainfo_copy[self.file]['status']))
+        app_state.EditorPage.mediainfo[self.file]['status'] = int(not(app_state.EditorPage.mediainfo[self.file]['status']))
         app_state.new_page(rout.Editor)
 
         
@@ -230,11 +227,11 @@ class StatusMediaFlag(ft.Checkbox):
         super().__init__()
         self._uid = _uid
         self.on_change = self.dataCheck
-        self.value = bool(int(app_state.EditorPage.mediainfo_copy[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][self._uid]['status']))
+        self.value = bool(int(app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][self._uid]['status']))
 
     def dataCheck(self, e):
         for edit in app_state.EditorPage.viewed_files:
-            app_state.EditorPage.mediainfo_copy[edit][app_state.EditorPage.info_mode][self._uid]['status'] = not(bool(app_state.EditorPage.mediainfo_copy[edit][app_state.EditorPage.info_mode][self._uid]['status']))
+            app_state.EditorPage.mediainfo[edit][app_state.EditorPage.info_mode][self._uid]['status'] = not(bool(app_state.EditorPage.mediainfo[edit][app_state.EditorPage.info_mode][self._uid]['status']))
         app_state.new_page(rout.Editor)
 
         

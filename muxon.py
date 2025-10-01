@@ -9,7 +9,7 @@ def main(page_control: ft.Page):
     page_control.theme_mode = ft.ThemeMode.LIGHT
     app_state.page_control = page_control
 
-    app_state.new_page(rout.Introductory)
+    app_state.new_page(rout.Projects)
     page_control.update()  
 
 
@@ -25,7 +25,7 @@ def main(page_control: ft.Page):
 
     # Функция переключения страниц
     async def control():
-        page_control.controls.clear()  # Очищаем текущий экран
+        page_control.controls.clear()
 
         page_control.add(rout.Navigation.link())
         page_control.add(app_state.page.link())

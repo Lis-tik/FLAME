@@ -1,19 +1,20 @@
 
 
-
-
 class EditorPage:
     def __init__(self):
-        self.info_mode = 'video'
-        self.mediainfo_copy = None
+        self.info_mode = 'general'
+        self.global_path = None
+        self.mediainfo = None
+        self.files  = []
 
         self.viewed_files = []
         self.viewed_track = None
         self.viewed_uid = None
         self.unification_mode = False
         
-        self.debug = None
+        self.debug_data = None
         self.DEBUG_COLORS = []
+
 
     @property
     def info_mode(self):
@@ -21,21 +22,20 @@ class EditorPage:
 
     @info_mode.setter
     def info_mode(self, new_value):
-        print(new_value)
         self._info_mode = new_value
         self.viewed_uid = None
 
 
+
+
 class AppState:
     def __init__(self):
-        #Общие данные
         self.projects = None
         self.page_control = None
-        
-        self.files  = []
+
+        self.viewed_project = None
         self.page = None
 
-        self.global_path = None
         self.transition = False
         self.project_name = "Мой проект"
         self.AUDIO_FORMATS = ['.mkv', '.mka', 'mp4']
@@ -45,12 +45,7 @@ class AppState:
         self.CONVERT_PROFILES = []
 
         self.InfoData = None
-        self._mediainfo_Original = None
-
-        #HOME PAGE
         self.EditorPage = EditorPage()
-
-
 
 
     def new_page(self, new_page):
@@ -60,16 +55,9 @@ class AppState:
 
 
 
-    @property
-    def mediainfo_Original(self):
-        return self._mediainfo_Original
-
-    @mediainfo_Original.setter
-    def mediainfo_Original(self, new_value):
-        self._mediainfo_Original = new_value
-        self.EditorPage.mediainfo_copy = self.mediainfo_Original
-
         
     
         
 app_state = AppState()  # Глобальный экземпляр
+
+
