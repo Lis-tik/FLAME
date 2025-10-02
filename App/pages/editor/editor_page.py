@@ -2,20 +2,18 @@ import flet as ft
 from App.storage import app_state
 import App.router as rout
 from App.pages.editor.control import UnificationButton, RuleButton, EditingInput, SampleMode, StatusCheck, StatusMediaFlag, ModeButton, addTrack, LangDrop, actTrack
-from App.src.projectsControl.DataControl import saveChange
 
 
 def modeCheck():
-    if app_state.EditorPage.info_mode == 'general':
-        return ft.Text('Общие сведения')
-    
     if app_state.EditorPage.viewed_uid in app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode]:
         app_state.EditorPage.viewed_track = app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]
     else:
         app_state.EditorPage.viewed_uid = None
 
     if not app_state.EditorPage.viewed_uid:
-        return ft.Text('Необходимо выбрать дорожку')
+        if app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode]:
+            return ft.Text('Необходимо выбрать дорожку')
+        return ft.Text('Дорожки не обнаружены')
     
     if app_state.EditorPage.info_mode == 'audio':
         return audioChannel()
@@ -26,8 +24,7 @@ def modeCheck():
 
 
     
-def GeneralInfo():
-    return ft.Text("Тут будет общая информация")
+
 
 def videoChannel():
     return ft.Container(
@@ -40,6 +37,10 @@ def videoChannel():
             ft.Row([
                 ft.Text(f"Кодек:", size=15, weight='bold'),
                 ft.Text(f"{app_state.EditorPage.viewed_track['codec_name']}", size=15),
+            ]),
+            ft.Row([
+                ft.Text(f"Индекс в контейнере:", size=15, weight='bold'),
+                ft.Text(f"{app_state.EditorPage.viewed_track['index_contain']}", size=15),
             ]),
             ft.Row([
                 ft.Text(f"Профиль:", size=15, weight='bold'),
@@ -60,6 +61,10 @@ def videoChannel():
             ft.Row([
                 ft.Text(f"Тип цветопередачи:", size=15, weight='bold'),
                 ft.Text(f"{app_state.EditorPage.viewed_track['pix_fmt']}", size=15),
+            ]),
+            ft.Row([
+                ft.Text(f"Дата добавления:", size=15, weight='bold'),
+                ft.Text(f"{app_state.EditorPage.viewed_track['added_date']}", size=15),
             ]),
 
             ft.Divider(height=1),
@@ -91,6 +96,10 @@ def subtitleChannel():
                 ft.Text(f"Источник:", size=15, weight='bold'),
                 ft.Text(f"{app_state.EditorPage.viewed_track['path'] if app_state.EditorPage.viewed_track['path'] else '[в составе контейнера]'}", size=15),
             ]),
+            ft.Row([
+                ft.Text(f"Дата добавления:", size=15, weight='bold'),
+                ft.Text(f"{app_state.EditorPage.viewed_track['added_date']}", size=15),
+            ]),
             ft.Divider(height=1),
 
             ft.Text('Параметры конвертера', size=18, weight='bold'),
@@ -110,7 +119,7 @@ def audioChannel():
             ]),
             ft.Row([
                 ft.Text(f"Индекс в контейнере:", size=15, weight='bold'),
-                ft.Text(f"{app_state.EditorPage.viewed_track['index']}", size=15),
+                ft.Text(f"{app_state.EditorPage.viewed_track['index_contain']}", size=15),
             ]),
             ft.Row([
                 ft.Text(f"Язык аудиодорожки:", size=15, weight='bold'),
@@ -132,6 +141,10 @@ def audioChannel():
                 ft.Text(f"Источник:", size=15, weight='bold'),
                 ft.Text(f"{app_state.EditorPage.viewed_track['path'] if app_state.EditorPage.viewed_track['path'] else '[в составе контейнера]'}", size=15),
             ]),
+            ft.Row([
+                ft.Text(f"Дата добавления:", size=15, weight='bold'),
+                ft.Text(f"{app_state.EditorPage.viewed_track['added_date']}", size=15),
+            ]),
             ft.Divider(height=1),
 
             ft.Text('Параметры конвертера', size=18, weight='bold'),
@@ -139,6 +152,23 @@ def audioChannel():
         ]),
         bgcolor=ft.Colors.TRANSPARENT if int(app_state.EditorPage.viewed_track['status']) else ft.Colors.BLACK12
     )
+
+def GeneralInfo():
+    return ft.Container(
+        ft.Column([
+            addTrack(),
+            ft.Text(f'{app_state.EditorPage.viewed_files[-1]}', size=17, weight='bold'),
+            ft.Row([
+                ft.Text(f"Общий битрейт:", size=15, weight='bold'),
+                ft.Text(f"{app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['bitrate']}", size=15),
+            ]),
+            ft.Row([
+                ft.Text(f"Тип файла:", size=15, weight='bold'),
+                ft.Text(f"{app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['extension']} ({app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['type']})", size=15),
+            ]),
+        ])
+    )
+
 
 
 
@@ -156,8 +186,6 @@ def includedButton():
             filesMain.append(loop)
 
     return filesMain
-
-
 
 
 def Information():
@@ -209,6 +237,8 @@ def metaData():
         expand=3,
     )
 
+
+
 def distributionData():
     if not app_state.EditorPage.viewed_files:
         return ft.Container(
@@ -225,6 +255,9 @@ def distributionData():
             ])
             content.append(track)
 
+
+    if app_state.EditorPage.info_mode == 'general':
+        return GeneralInfo()
 
 
     return ft.Container(

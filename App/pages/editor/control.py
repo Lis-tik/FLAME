@@ -77,20 +77,15 @@ class addTrack(ft.ElevatedButton):
 
 
     def messageMode(self):
-        if app_state.EditorPage.unification_mode:
-            if app_state.EditorPage.info_mode == 'audio':
-                return 'Добавить файл с аудиодорожками'
-            elif app_state.EditorPage.info_mode == 'subtitle':
-                return 'Добавить файл с субтитрами'
-            elif app_state.EditorPage.info_mode == 'video':
-                return 'Добавить файл с общими контейнерами'     
-        else:
-            if app_state.EditorPage.info_mode == 'audio':
-                return 'Добавить аудиодорожку'
-            elif app_state.EditorPage.info_mode == 'subtitle':
-                return 'Добавить субтитры'
-            elif app_state.EditorPage.info_mode == 'video':
-                return 'Добавить видеодорожку'
+
+        if app_state.EditorPage.info_mode == 'audio':
+            return 'Добавить аудиодорожку'
+        elif app_state.EditorPage.info_mode == 'subtitle':
+            return 'Добавить субтитры'
+        elif app_state.EditorPage.info_mode == 'video':
+            return 'Добавить видеодорожку'
+        elif app_state.EditorPage.info_mode == 'general':
+            return 'Добавить контейнер для слияния'
 
 
 
@@ -104,7 +99,9 @@ class addTrack(ft.ElevatedButton):
 
         if app_state.EditorPage.unification_mode:
             path = filedialog.askdirectory(title="Выберите папку")
-            for meta in os.listdir(path):
+            
+            docker = [f for f in os.listdir(path) if any(f.lower().endswith(fmt) for fmt in app_state.MEDIA_FORMATS)]
+            for meta in docker:
                 list_cop.append(f'{path}/{meta}')
         else:
             path = filedialog.askopenfilename(title="Выберите файл")

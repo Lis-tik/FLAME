@@ -1,11 +1,18 @@
 
 
+class ConverterProfile:
+    def __init__(self):
+        self.type = None
+
+
 class EditorPage:
     def __init__(self):
         self.info_mode = 'general'
         self.global_path = None
         self.mediainfo = None
         self.files  = []
+
+        self.fixation = None
 
         self.viewed_files = []
         self.viewed_track = None
@@ -38,8 +45,27 @@ class AppState:
 
         self.transition = False
         self.project_name = "Мой проект"
-        self.AUDIO_FORMATS = ['.mkv', '.mka', 'mp4']
-        self.SUBTITLES_FORMATS  = ['.srt', '.ass', '.vtt', '.sub', '.ttml', '.pgs']
+        self.MEDIA_FORMATS = [
+            # Видео контейнеры
+            '.mkv', '.mp4', '.avi', '.mov', '.wmv', '.flv', '.webm', '.m4v',
+            '.mpg', '.mpeg', '.m2ts', '.ts', '.mts', '.vob', '.ogv', '.3gp',
+            
+            # Аудио форматы
+            '.mp3', '.m4a', '.flac', '.wav', '.wma', '.aac', '.ogg', '.oga',
+            '.opus', '.mka', '.ac3', '.dts', '.aiff', '.ape', '.wv', '.tta',
+            
+            # Специализированные видео форматы
+            '.rm', '.rmvb', '.asf', '.divx', '.mxf', '.nut', '.yuv',
+            
+            # Изображения (только для кодирования/декодирования)
+            '.jpg', '.jpeg', '.png', '.bmp', '.gif', '.tiff', '.webp', '.avif',
+            
+            # Плейлисты и списки
+            '.m3u', '.m3u8', '.pls',
+            
+            # Субтитры
+            '.srt', '.ass', '.ssa', '.sub', '.vtt'
+        ]
         self.LANGUAGE_LIST = ['jpn', 'eng', 'rus']
 
         self.CONVERT_PROFILES = []
