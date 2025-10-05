@@ -1,7 +1,7 @@
 import flet as ft
 from App.storage import app_state
 import App.router as rout
-from App.pages.editor.control import UnificationButton, RuleButton, EditingInput, SampleMode, StatusCheck, StatusMediaFlag, ModeButton, addTrack, LangDrop, actTrack
+from App.pages.editor.control import UnificationButton, RuleButton, SampleMode, StatusCheck, StatusMediaFlag, ModeButton, addTrack, LangDrop, actTrack, EditingTitle, addMedia
 
 
 def modeCheck():
@@ -82,7 +82,7 @@ def subtitleChannel():
         ft.Column([
             ft.Row([
                 ft.Text("Описание (имя) субтитров:", size=15, weight='bold'),
-                EditingInput()
+                EditingTitle()
             ]),
             ft.Row([
                 ft.Text(f"Язык субтитров:", size=15, weight='bold'),
@@ -115,7 +115,7 @@ def audioChannel():
         ft.Column([
             ft.Row([
                 ft.Text("Описание (имя) аудиодорожки:", size=15, weight='bold'),
-                EditingInput()
+                EditingTitle()
             ]),
             ft.Row([
                 ft.Text(f"Индекс в контейнере:", size=15, weight='bold'),
@@ -174,7 +174,17 @@ def GeneralInfo():
 
 def includedButton():
     filesMain = []
-    filesMain.append(UnificationButton('Режим объединения (BETA)'))
+
+    mode_menu = ft.Column([
+        ft.Row([
+            addMedia(),
+            UnificationButton('Режим объединения (BETA)'),
+        ]),
+        ft.Divider(height=1)
+    ])
+
+    filesMain.append(mode_menu)
+
     filesMain.append(SampleMode())
     
     if app_state.EditorPage.mediainfo:
@@ -272,6 +282,21 @@ def distributionData():
 
 
 def get_editor_page():
+    if not app_state.EditorPage:
+        return ft.Container(
+            content=ft.Column(
+                [
+                    ft.Text('Выбирете или создайте новый проект', size=20, weight='bold'),
+                    ft.ElevatedButton('Вернуться к менеджеру проектов', on_click=lambda e: app_state.new_page(rout.Projects)),
+                ],
+                alignment="center",
+                horizontal_alignment="center",
+            ),
+            expand=True,
+            alignment=ft.alignment.center  # <-- именно это центрирует весь блок на экране
+        )
+    
+
     return ft.Column(
         controls=[
             ft.Text(app_state.viewed_project, size=20, weight='bold'),

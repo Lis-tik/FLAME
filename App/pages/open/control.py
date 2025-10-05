@@ -31,6 +31,6 @@ class ProjManageContainer(ft.Container):
         self.on_click = self.projectRule
 
     def projectRule(self, e):
-        unpackingData(self.data)
         app_state.viewed_project = self.data
+        unpackingData(self.data)
         app_state.new_page(rout.Editor)

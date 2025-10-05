@@ -9,7 +9,7 @@ class EditorPage:
     def __init__(self):
         self.info_mode = 'general'
         self.global_path = None
-        self.mediainfo = None
+        self.mediainfo = {}
         self.files  = []
 
         self.fixation = None
@@ -20,7 +20,7 @@ class EditorPage:
         self.unification_mode = False
         
         self.debug_data = None
-        self.DEBUG_COLORS = []
+
 
 
     @property
@@ -66,12 +66,30 @@ class AppState:
             # Субтитры
             '.srt', '.ass', '.ssa', '.sub', '.vtt'
         ]
-        self.LANGUAGE_LIST = ['jpn', 'eng', 'rus']
+
+
+        self.LANGUAGE_LIST = {
+            'jpn': 'Японский',
+            'eng': 'Английский',
+            'rus': 'Русский'
+            }
 
         self.CONVERT_PROFILES = []
 
         self.InfoData = None
+        self.EditorPage = None
+
+
+    @property
+    def viewed_project(self):
+        return self._viewed_project
+
+    @viewed_project.setter
+    def viewed_project(self, new_value):
+        self._viewed_project = new_value
         self.EditorPage = EditorPage()
+        print("ПРОЕКТ СМЕНИЛСЯ")
+
 
 
     def new_page(self, new_page):
@@ -84,6 +102,5 @@ class AppState:
         
     
         
-app_state = AppState()  # Глобальный экземпляр
-
+app_state = AppState() 
 

@@ -10,7 +10,7 @@ def generate_unique_uid(id, prefix=""):
 
 
 
-def get_intelligence(file, new_data=0):
+def get_intelligence(file, new_data=0, global_path=0):
 
     if not new_data:
         incell = f'{app_state.EditorPage.global_path}/{file}'
@@ -41,17 +41,17 @@ def get_intelligence(file, new_data=0):
     for stream in probe['streams']:
         if stream['codec_type'] == 'video' and (app_state.EditorPage.info_mode == 'video' or app_state.EditorPage.info_mode == 'general'):
             video_data_add = videostream(stream, new_data)
-            uid = generate_unique_uid(f'{video_data_add['index_contain']}_{video_data_add['path']}_{app_state.fixation}', 'video')
+            uid = generate_unique_uid(f'{video_data_add['index_contain']}_{app_state.fixation}', 'video')
             app_state.EditorPage.mediainfo[file]['video'][uid] = video_data_add
 
         elif stream['codec_type'] == 'audio' and (app_state.EditorPage.info_mode == 'audio' or app_state.EditorPage.info_mode == 'general'):
             new_audio_chanel = audiostream(stream, new_data)
-            uid = generate_unique_uid(f'{new_audio_chanel['index_contain']}_{new_audio_chanel['path']}_{app_state.fixation}', 'audio')
+            uid = generate_unique_uid(f'{new_audio_chanel['index_contain']}_{new_audio_chanel['title']}_{app_state.fixation}', 'audio')
             app_state.EditorPage.mediainfo[file]['audio'][uid] = new_audio_chanel
 
         elif stream['codec_type'] == 'subtitle' and (app_state.EditorPage.info_mode == 'subtitle' or app_state.EditorPage.info_mode == 'general'):
             new_subtitle_chanel = subtitles(stream, new_data)
-            uid = generate_unique_uid(f'{new_subtitle_chanel['index_contain']}_{new_subtitle_chanel['path']}_{app_state.fixation}', 'subtitle')
+            uid = generate_unique_uid(f'{new_subtitle_chanel['index_contain']}_{new_subtitle_chanel['title']}_{app_state.fixation}', 'subtitle')
             app_state.EditorPage.mediainfo[file]['subtitle'][uid] = new_subtitle_chanel
 
 

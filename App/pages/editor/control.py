@@ -4,7 +4,10 @@ from App.storage import app_state
 import App.router as rout
 from tkinter import Tk, filedialog
 import os
-from App.src.projectsControl.DataControl import add_track, dataEdit
+from App.src.projectsControl.DataControl import add_track, dataEdit, add_file
+
+
+
 
 
 class ConvertProfileDrop(ft.Dropdown):
@@ -29,12 +32,29 @@ class LangDrop(ft.Dropdown):
         self.options = []
         
         for lang in app_state.LANGUAGE_LIST:
-            self.options.append(ft.dropdown.Option(lang))
+            self.options.append(ft.dropdown.Option(lang, f'{app_state.LANGUAGE_LIST[lang]} [{lang}]'))
 
 
     def changeLang(self, e):
         dataEdit('language', self.value)
         app_state.new_page(rout.Editor)
+
+
+class addMedia(ft.ElevatedButton):
+    def __init__(self):
+        super().__init__(expand=True)
+        self.text = '+ Файл'
+        self.on_click = self.tracknum
+
+    def tracknum(self, e):
+        path = filedialog.askopenfilename(title="Выберите файл")
+        if path:
+            print(path)
+            add_file(path)
+        app_state.new_page(rout.Editor)
+
+        
+
 
 
 
@@ -164,28 +184,63 @@ class RuleButton(ft.ElevatedButton):
             
         app_state.new_page(rout.Editor)
 
-    
-        
 
-
-class EditingInput(ft.TextField):
+class EditingTitle(ft.Container):
     def __init__(self):
         super().__init__()
         self.state = app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]
         self.value = self.state['title']
+        self.active = False
         self.border_color = ft.Colors.BLUE if self.value else ft.Colors.RED
-        self.hint_text = 'Поле должно быть заполнено!'
-        self.on_change = self.handle_change
 
-    
-    def handle_change(self, e):
-        dataEdit('title', self.value)
+        self.input_field = ft.TextField(
+            value=self.value,
+            on_change=self.on_input_change,
+            autofocus=True,
+            dense=True,
+            content_padding=ft.padding.all(5),
+            border_color=ft.Colors.BLUE
+        )
+
+
+        self.content = ft.Row(
+            controls=self.processing(),
+            spacing=10,
+        )
+
+        self.content=ft.Row(
+            controls=self.processing(),
+            spacing=10,
+        )
+
+
+    def on_input_change(self, e):
+        self.value = e.control.value
+
+    def processing(self):
+        if not self.active:
+            return [ft.Text(self.value, size=15),
+                    ft.ElevatedButton(content = ft.Icon(ft.Icons.EDIT, size=15, color=ft.Colors.BLUE_700), on_click=self.remote_active)]
         
+        return [self.input_field,
+                ft.ElevatedButton(content = ft.Icon(ft.Icons.CHECK, size=15, color=ft.Colors.BLUE_700), on_click=self.remote_active)]
+    
+    def remote_active(self, e):
         if not self.value:
-            self.border_color = ft.Colors.RED
-        else:
-            self.border_color = ft.Colors.BLUE
+            return
+        
+        self.active = not(self.active)
+        self.content.controls = self.processing()
+        
+        if not self.active:
+            print(self.value)
+            dataEdit('title', self.value)
+
         self.update()
+        
+        
+
+
 
 
 class SampleMode(ft.Checkbox):

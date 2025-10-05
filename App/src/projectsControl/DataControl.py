@@ -1,7 +1,7 @@
 import ffmpeg
 from App.src.projectsControl.intelligence import get_intelligence, videostream, audiostream, subtitles
 from App.src.debugcontrol import debug_analysis
-from App.storage import app_state
+from App.storage import app_state, EditorPage
 import json
 from pathlib import Path
 from datetime import datetime
@@ -19,8 +19,11 @@ def start_getinfo():
 def add_track(new_data):
     app_state.fixation = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     for index, value in enumerate(app_state.EditorPage.viewed_files):
-        get_intelligence(value, new_data[index])
+        get_intelligence(f'{app_state.EditorPage.global_path}/{value}', new_data[index])
 
+
+def add_file(file):
+    get_intelligence(file)
 
 
 def dataEdit(key, new_value):
@@ -41,11 +44,12 @@ def dataEdit(key, new_value):
 
 def unpackingData(proj):
     with open(f'./UserData/projects/{proj}/data.json', 'r', encoding='utf-8') as file:
-        app_state.EditorPage.mediainfo = {}
         
         data = json.load(file)
         for media in data['content']:
             app_state.EditorPage.mediainfo[media['name']] = media
+
+
             
         
 
