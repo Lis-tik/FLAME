@@ -62,18 +62,18 @@ def navigation():
                 ),
                 on_click=lambda e: app_state.new_page(rout.Introductory),
             ),
-            ft.ElevatedButton(
-                content=ft.Row([
-                    ft.Icon(ft.Icons.SETTINGS, size=16),
-                    ft.Text("Настройки", size=14),
-                ], spacing=8),
-                opacity=1.0,
-                style=ft.ButtonStyle(
-                    padding=ft.padding.symmetric(horizontal=16, vertical=12),
-                    shape=ft.RoundedRectangleBorder(radius=6),
-                ),
-                on_click=lambda e: app_state.new_page(rout.Settings),
-            ),
+            # ft.ElevatedButton(
+            #     content=ft.Row([
+            #         ft.Icon(ft.Icons.SETTINGS, size=16),
+            #         ft.Text("Настройки", size=14),
+            #     ], spacing=8),
+            #     opacity=1.0,
+            #     style=ft.ButtonStyle(
+            #         padding=ft.padding.symmetric(horizontal=16, vertical=12),
+            #         shape=ft.RoundedRectangleBorder(radius=6),
+            #     ),
+            #     on_click=lambda e: app_state.new_page(rout.Settings),
+            # ),
         ],
         spacing=8,
         run_spacing=8,

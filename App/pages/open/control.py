@@ -17,7 +17,7 @@ class ProjManageContainer(ft.Container):
                             weight=ft.FontWeight.BOLD,
                             color=ft.Colors.BLACK87),
 
-                        ft.Text("Последнее изменение: ", 
+                        ft.Text(f"Последнее изменение:", 
                             size=12, 
                             color=ft.Colors.GREY_600),
                     ],

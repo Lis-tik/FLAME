@@ -118,12 +118,16 @@ def audioChannel():
                 EditingTitle()
             ]),
             ft.Row([
+                ft.Text(f"Язык аудиодорожки:", size=15, weight='bold'),
+                LangDrop(app_state.EditorPage.viewed_track['language']),
+            ]),
+            ft.Row([
                 ft.Text(f"Индекс в контейнере:", size=15, weight='bold'),
                 ft.Text(f"{app_state.EditorPage.viewed_track['index_contain']}", size=15),
             ]),
             ft.Row([
-                ft.Text(f"Язык аудиодорожки:", size=15, weight='bold'),
-                LangDrop(app_state.EditorPage.viewed_track['language']),
+                ft.Text(f"Длительность:", size=15, weight='bold'),
+                ft.Text(f"{app_state.EditorPage.viewed_track['duration']}", size=15),
             ]),
             ft.Row([
                 ft.Text(f"Кодек аудиодорожки:", size=15, weight='bold'),
@@ -153,11 +157,24 @@ def audioChannel():
         bgcolor=ft.Colors.TRANSPARENT if int(app_state.EditorPage.viewed_track['status']) else ft.Colors.BLACK12
     )
 
+def durationtranslation():
+    duration = app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['duration']
+    hours = int(duration // 3600)
+    minutes = int((duration % 3600) // 60)
+    seconds = int(duration % 60)
+    milliseconds = int((duration - int(duration)) * 1000)
+
+    return f"{hours:02}:{minutes:02}:{seconds:02}:{milliseconds:03}"
+
 def GeneralInfo():
     return ft.Container(
         ft.Column([
             addTrack(),
             ft.Text(f'{app_state.EditorPage.viewed_files[-1]}', size=17, weight='bold'),
+            ft.Row([
+                ft.Text(f"Общая длительность:", size=15, weight='bold'),
+                ft.Text(durationtranslation(), size=15),
+            ]),
             ft.Row([
                 ft.Text(f"Общий битрейт:", size=15, weight='bold'),
                 ft.Text(f"{app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['bitrate']}", size=15),

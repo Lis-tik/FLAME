@@ -10,24 +10,22 @@ def generate_unique_uid(id, prefix=""):
 
 
 
-def get_intelligence(file, new_data=0, global_path=0):
+def get_intelligence(new_data, inherits=0):
 
-    if not new_data:
-        incell = f'{app_state.EditorPage.global_path}/{file}'
+    if not inherits:
+        prode_file = f'{new_data['path']}/{new_data['name']}'   
     else:
-        incell = new_data
-        
-    probe = ffmpeg.probe(incell)
+        prode_file = inherits[-1]
 
-    if not app_state.EditorPage.mediainfo:
-        app_state.EditorPage.mediainfo = {}
+
+    probe = ffmpeg.probe(prode_file)
 
     # print(probe)
-    if not (file in app_state.EditorPage.mediainfo):
-        app_state.EditorPage.mediainfo[file] = { 
-            'name': file,
-            'path': app_state.EditorPage.global_path,
-            "extension": (os.path.splitext(f'{app_state.EditorPage.global_path}/{file}')[1])[1:],
+    if not (new_data['name'] in app_state.EditorPage.mediainfo):
+        app_state.EditorPage.mediainfo[new_data['name']] = { 
+            'name': new_data['name'],
+            'path': new_data['path'],
+            "extension": (os.path.splitext(prode_file)[1])[1:],
             'type': probe['format']['format_long_name'],
             'duration': float(probe['format']['duration']),
             'bitrate': float(probe['format']['bit_rate']),
@@ -38,21 +36,22 @@ def get_intelligence(file, new_data=0, global_path=0):
         }
 
 
+
     for stream in probe['streams']:
         if stream['codec_type'] == 'video' and (app_state.EditorPage.info_mode == 'video' or app_state.EditorPage.info_mode == 'general'):
-            video_data_add = videostream(stream, new_data)
+            video_data_add = videostream(stream, prode_file)
             uid = generate_unique_uid(f'{video_data_add['index_contain']}_{app_state.fixation}', 'video')
-            app_state.EditorPage.mediainfo[file]['video'][uid] = video_data_add
+            app_state.EditorPage.mediainfo[new_data['name']]['video'][uid] = video_data_add
 
         elif stream['codec_type'] == 'audio' and (app_state.EditorPage.info_mode == 'audio' or app_state.EditorPage.info_mode == 'general'):
-            new_audio_chanel = audiostream(stream, new_data)
+            new_audio_chanel = audiostream(stream, prode_file)
             uid = generate_unique_uid(f'{new_audio_chanel['index_contain']}_{new_audio_chanel['title']}_{app_state.fixation}', 'audio')
-            app_state.EditorPage.mediainfo[file]['audio'][uid] = new_audio_chanel
+            app_state.EditorPage.mediainfo[new_data['name']]['audio'][uid] = new_audio_chanel
 
         elif stream['codec_type'] == 'subtitle' and (app_state.EditorPage.info_mode == 'subtitle' or app_state.EditorPage.info_mode == 'general'):
-            new_subtitle_chanel = subtitles(stream, new_data)
+            new_subtitle_chanel = subtitles(stream, prode_file)
             uid = generate_unique_uid(f'{new_subtitle_chanel['index_contain']}_{new_subtitle_chanel['title']}_{app_state.fixation}', 'subtitle')
-            app_state.EditorPage.mediainfo[file]['subtitle'][uid] = new_subtitle_chanel
+            app_state.EditorPage.mediainfo[new_data['name']]['subtitle'][uid] = new_subtitle_chanel
 
 
 
@@ -88,6 +87,7 @@ def audiostream(stream, path=0):
         'channels': stream.get('channels', 'unknown'),  
         'sample_rate': stream.get('sample_rate', 'unknown'), 
         'bit_rate': stream.get('bit_rate', 'unknown'),  
+        'duration': stream.get('duration', 'unknown'),  
         'added_date': app_state.fixation,
         'status': 1,
         'path': path

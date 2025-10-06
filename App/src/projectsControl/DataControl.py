@@ -9,21 +9,28 @@ from datetime import datetime
 
 
 
-def start_getinfo():
+def start_getinfo(path):
     app_state.fixation = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     for x in range(len(app_state.EditorPage.files)):
         name_path = app_state.EditorPage.files[x]
-        get_intelligence(name_path)
+
+        new_data = {
+            'name': name_path,
+            'path': path
+        }
+
+        get_intelligence(new_data)
 
 
 def add_track(new_data):
     app_state.fixation = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     for index, value in enumerate(app_state.EditorPage.viewed_files):
-        get_intelligence(f'{app_state.EditorPage.global_path}/{value}', new_data[index])
+        get_intelligence({"name": value}, new_data)
 
 
-def add_file(file):
-    get_intelligence(file)
+def add_file(name, path):
+    get_intelligence({"name": name, "path": path})
+
 
 
 def dataEdit(key, new_value):

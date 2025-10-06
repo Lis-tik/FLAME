@@ -3,17 +3,29 @@ from App.storage import app_state
 import App.router as rout 
 
 
-class profileButton(ft.ElevatedButton):
-    def __init__(self, text):
+class BashInput(ft.TextField):
+    def __init__(self, initial_value=""):
         super().__init__(expand=True)
-        self.text = text
-        # self.on_click = self.modeFunc
+        self.value = initial_value
+
+
+class profileButton(ft.ElevatedButton):
+    def __init__(self, data):
+        super().__init__(expand=True)
+        self.data = data
+        self.text = data['name']
+        self.on_click = self.profile
+        self.viewed = True if self.data == app_state.viewed_profile else False
 
 
         self.style = ft.ButtonStyle(
             shape=ft.RoundedRectangleBorder(radius=1),
-            # bgcolor=(ft.Colors.GREY_300 if self.viewed else ft.Colors.WHITE)
+            bgcolor=(ft.Colors.GREY_300 if self.viewed else ft.Colors.WHITE)
             )
+        
+    def profile(self, e):
+        app_state.viewed_profile = self.data
+        app_state.new_page(rout.Converter)
     
 
 
@@ -41,4 +53,4 @@ class createProfile(ft.ElevatedButton):
 
     def func(self, e):
         return
-        app_state.new_page(rout.Editor)
+        app_state.new_page(rout.Converter)
