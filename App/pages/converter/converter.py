@@ -9,7 +9,8 @@ def convertEdit():
     return ft.Container(
         ft.Column([
             ft.Row([
-                ft.Text('')
+                ft.Text('Имя профиля: ', size=15, weight='bold'),
+                ft.Text(app_state.viewed_profile['name'], size=15)
             ])
         ])
     )
@@ -28,9 +29,7 @@ def summaryData():
     if not app_state.viewed_profile:
         return ft.Text('Выберете или создайте профиль для редактирования')
     
-    return ft.Container(
-        BashInput()
-    )
+    return convertEdit()
 
 
 
@@ -49,7 +48,7 @@ def main():
 
 
 def converter():
-    initialization_profiles()
+
     return ft.Container(
         main()
     )

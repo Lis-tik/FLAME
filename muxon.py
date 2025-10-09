@@ -3,11 +3,13 @@ import flet as ft
 from App.storage import app_state
 import App.router as rout
 import asyncio
-
+from App.src.convertedition.DataControl import initialization_profiles
 
 def main(page_control: ft.Page):
     page_control.theme_mode = ft.ThemeMode.LIGHT
     app_state.page_control = page_control
+
+    initialization_profiles()
 
     app_state.new_page(rout.Projects)
     page_control.update()  

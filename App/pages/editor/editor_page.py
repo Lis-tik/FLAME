@@ -1,7 +1,7 @@
 import flet as ft
 from App.storage import app_state
 import App.router as rout
-from App.pages.editor.control import UnificationButton, RuleButton, SampleMode, StatusCheck, StatusMediaFlag, ModeButton, addTrack, LangDrop, actTrack, EditingTitle, addMedia
+from App.pages.editor.control import UnificationButton, RuleButton, SampleMode, StatusCheck, StatusMediaFlag, ModeButton, addTrack, LangDrop, actTrack, EditingTitle, addMedia, ConvertProfileDrop
 
 
 def modeCheck():
@@ -23,7 +23,42 @@ def modeCheck():
         return videoChannel()
 
 
+
+
+def bashPreview():
+    viewed = app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]
+    message = f'ffmpeg -i {viewed['path']}/{viewed['name']}{' ' if app_state.EditorPage.bashPreview_mode else '\n'}'
+
+    if not viewed['convertprotocol']:
+        return ft.Text("Не выбран профиль конвертера. Данные будут перенесены без изменений")
     
+
+    for command in viewed['convertprotocol'][app_state.EditorPage.info_mode]:
+        if viewed['convertprotocol'][app_state.EditorPage.info_mode][command]:
+            message += f'-{command} {viewed['convertprotocol'][app_state.EditorPage.info_mode][command]}{' ' if app_state.EditorPage.bashPreview_mode else '\n'}' 
+        else:
+            message += f'-{command}{' ' if app_state.EditorPage.bashPreview_mode else '\n'}'
+
+
+
+    bash_command = ft.Container(
+        content=ft.Text(
+            value=message,
+            style=ft.TextStyle(
+                font_family="Courier New",
+                size=14,
+                color=ft.Colors.BLACK87,
+                weight=ft.FontWeight.NORMAL
+            )
+        ),
+        bgcolor=ft.Colors.GREY_100,
+        padding=10,
+        border_radius=6,
+        border=ft.border.all(1, ft.Colors.GREY_400),
+        margin=5
+    )
+
+    return bash_command
 
 
 def videoChannel():
@@ -70,8 +105,8 @@ def videoChannel():
             ft.Divider(height=1),
 
 
-            ft.Text('Параметры конвертера', size=18, weight='bold'),
-            ft.ElevatedButton('Доступные профили')
+            ft.Text('Предварительная команда конвертера', size=18, weight='bold'),
+            bashPreview()
         ]),
         bgcolor=ft.Colors.TRANSPARENT if int(app_state.EditorPage.viewed_track['status']) else ft.Colors.BLACK12
     )
@@ -102,8 +137,8 @@ def subtitleChannel():
             ]),
             ft.Divider(height=1),
 
-            ft.Text('Параметры конвертера', size=18, weight='bold'),
-            ft.ElevatedButton('Доступные профили')
+            ft.Text('Предварительная команда конвертера', size=18, weight='bold'),
+            bashPreview()
         ]),
         bgcolor=ft.Colors.TRANSPARENT if int(app_state.EditorPage.viewed_track['status']) else ft.Colors.BLACK12
     )
@@ -151,8 +186,8 @@ def audioChannel():
             ]),
             ft.Divider(height=1),
 
-            ft.Text('Параметры конвертера', size=18, weight='bold'),
-            ft.ElevatedButton('Доступные профили')
+            ft.Text('Предварительная команда конвертера', size=18, weight='bold'),
+            bashPreview()
         ]),
         bgcolor=ft.Colors.TRANSPARENT if int(app_state.EditorPage.viewed_track['status']) else ft.Colors.BLACK12
     )
@@ -183,6 +218,10 @@ def GeneralInfo():
                 ft.Text(f"Тип файла:", size=15, weight='bold'),
                 ft.Text(f"{app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['extension']} ({app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['type']})", size=15),
             ]),
+            ft.Divider(height=1),
+
+            ft.Text('Выбор профиля конвертера', size=18, weight='bold'),
+            ConvertProfileDrop()
         ])
     )
 

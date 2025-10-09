@@ -12,6 +12,8 @@ class EditorPage:
         self.mediainfo = {}
         self.files  = []
 
+        self.bashPreview_mode = 0
+
         self.fixation = None
 
         self.viewed_files = []
@@ -85,7 +87,7 @@ class AppState:
             'som': 'Сомалийский', 'tgl': 'Тагальский'
         }
 
-        self.CONVERT_PROFILES = []
+        self.CONVERT_PROFILES = {}
         self.viewed_profile = None
 
         self.InfoData = None

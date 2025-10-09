@@ -9,16 +9,21 @@ from App.src.projectsControl.DataControl import add_track, dataEdit, add_file
 
 
 
-
 class ConvertProfileDrop(ft.Dropdown):
     def __init__(self):
         super().__init__()
-        self.value = None
+        self.value = None if not app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['convertprotocol'] else app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['convertprotocol']['name']
+        self.hint_text = "Не выбрано!"
         self.options = []
         self.on_change = self.changeProf
 
-        for lang in app_state.LANGUAGE_LIST:
-            self.options.append(ft.dropdown.Option(lang))
+        for profile in app_state.CONVERT_PROFILES:
+            self.options.append(ft.dropdown.Option(profile))
+
+    def changeProf(self, e):
+        for media in app_state.EditorPage.viewed_files:
+            app_state.EditorPage.mediainfo[media]['convertprotocol'] = app_state.CONVERT_PROFILES[self.value]
+        app_state.new_page(rout.Editor)
 
 
 class LangDrop(ft.Dropdown):

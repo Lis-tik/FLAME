@@ -30,6 +30,7 @@ def get_intelligence(new_data, inherits=0):
             'duration': float(probe['format']['duration']),
             'bitrate': float(probe['format']['bit_rate']),
             'status': 1,
+            'convertprotocol': 0,
             'video': {},
             'audio': {},
             'subtitle': {}
