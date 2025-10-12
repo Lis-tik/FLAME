@@ -5,14 +5,14 @@ import App.router as rout
 from tkinter import Tk, filedialog
 import os
 from App.src.projectsControl.DataControl import add_track, dataEdit, add_file
-
+from App.src.convertedition.DataControl import transformation
 
 
 
 class ConvertProfileDrop(ft.Dropdown):
     def __init__(self):
         super().__init__()
-        self.value = None if not app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['convertprotocol'] else app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['convertprotocol']['name']
+        self.value = app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['profile']
         self.hint_text = "Не выбрано!"
         self.options = []
         self.on_change = self.changeProf
@@ -22,7 +22,9 @@ class ConvertProfileDrop(ft.Dropdown):
 
     def changeProf(self, e):
         for media in app_state.EditorPage.viewed_files:
-            app_state.EditorPage.mediainfo[media]['convertprotocol'] = app_state.CONVERT_PROFILES[self.value]
+            app_state.EditorPage.mediainfo[media]['profile'] = self.value
+
+        transformation()
         app_state.new_page(rout.Editor)
 
 

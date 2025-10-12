@@ -26,37 +26,30 @@ def modeCheck():
 
 
 def bashPreview():
-    viewed = app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]
-    message = f'ffmpeg -i {viewed['path']}/{viewed['name']}{' ' if app_state.EditorPage.bashPreview_mode else '\n'}'
+    viewed = app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]
 
-    if not viewed['convertprotocol']:
+    if not app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['profile']:
         return ft.Text("Не выбран профиль конвертера. Данные будут перенесены без изменений")
     
-
-    for command in viewed['convertprotocol'][app_state.EditorPage.info_mode]:
-        if viewed['convertprotocol'][app_state.EditorPage.info_mode][command]:
-            message += f'-{command} {viewed['convertprotocol'][app_state.EditorPage.info_mode][command]}{' ' if app_state.EditorPage.bashPreview_mode else '\n'}' 
-        else:
-            message += f'-{command}{' ' if app_state.EditorPage.bashPreview_mode else '\n'}'
-
-
-
-    bash_command = ft.Container(
-        content=ft.Text(
-            value=message,
-            style=ft.TextStyle(
-                font_family="Courier New",
-                size=14,
-                color=ft.Colors.BLACK87,
-                weight=ft.FontWeight.NORMAL
-            )
-        ),
-        bgcolor=ft.Colors.GREY_100,
-        padding=10,
-        border_radius=6,
-        border=ft.border.all(1, ft.Colors.GREY_400),
-        margin=5
-    )
+    
+    bash_command = []
+    for contain in viewed['converted']:
+        bash_command.append(ft.Container(
+            content=ft.Text(
+                value=contain,
+                style=ft.TextStyle(
+                    font_family="Courier New",
+                    size=14,
+                    color=ft.Colors.BLACK87,
+                    weight=ft.FontWeight.NORMAL
+                )
+            ),
+            bgcolor=ft.Colors.GREY_100,
+            padding=10,
+            border_radius=6,
+            border=ft.border.all(1, ft.Colors.GREY_400),
+            margin=5
+        ))
 
     return bash_command
 
@@ -106,7 +99,7 @@ def videoChannel():
 
 
             ft.Text('Предварительная команда конвертера', size=18, weight='bold'),
-            bashPreview()
+            ft.Column(bashPreview())
         ]),
         bgcolor=ft.Colors.TRANSPARENT if int(app_state.EditorPage.viewed_track['status']) else ft.Colors.BLACK12
     )
@@ -138,7 +131,8 @@ def subtitleChannel():
             ft.Divider(height=1),
 
             ft.Text('Предварительная команда конвертера', size=18, weight='bold'),
-            bashPreview()
+            ft.Column(bashPreview())
+
         ]),
         bgcolor=ft.Colors.TRANSPARENT if int(app_state.EditorPage.viewed_track['status']) else ft.Colors.BLACK12
     )
@@ -187,7 +181,7 @@ def audioChannel():
             ft.Divider(height=1),
 
             ft.Text('Предварительная команда конвертера', size=18, weight='bold'),
-            bashPreview()
+            ft.Column(bashPreview())
         ]),
         bgcolor=ft.Colors.TRANSPARENT if int(app_state.EditorPage.viewed_track['status']) else ft.Colors.BLACK12
     )

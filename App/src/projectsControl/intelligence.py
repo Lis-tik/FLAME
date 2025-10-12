@@ -30,7 +30,7 @@ def get_intelligence(new_data, inherits=0):
             'duration': float(probe['format']['duration']),
             'bitrate': float(probe['format']['bit_rate']),
             'status': 1,
-            'convertprotocol': 0,
+            'profile': 0,
             'video': {},
             'audio': {},
             'subtitle': {}
@@ -72,7 +72,8 @@ def videostream(stream, path=0):
         'index_contain': stream['index'],  
         'added_date': app_state.fixation,
         'status': 1,
-        'path': path
+        'path': path,
+        'converted': []
     }
     return data
     
@@ -91,7 +92,9 @@ def audiostream(stream, path=0):
         'duration': stream.get('duration', 'unknown'),  
         'added_date': app_state.fixation,
         'status': 1,
-        'path': path
+        'path': path,
+        'converted': []
+
     }
     return data
 
@@ -107,6 +110,7 @@ def subtitles(stream, path=0):
         'is_text': int(stream.get('codec_name', '').lower() in ['subrip', 'ass', 'ssa', 'mov_text', 'webvtt']),
         'added_date': app_state.fixation,
         'status': 1,
-        'path': path
+        'path': path,
+        'converted': []
     }
     return data
