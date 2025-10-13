@@ -1,7 +1,7 @@
 import flet as ft
 from App.storage import app_state
 import App.router as rout
-from App.pages.editor.control import UnificationButton, RuleButton, SampleMode, StatusCheck, StatusMediaFlag, ModeButton, addTrack, LangDrop, actTrack, EditingTitle, addMedia, ConvertProfileDrop
+from App.pages.editor.control import UnificationButton, RuleButton, SampleMode, StatusCheck, StatusMediaFlag, ModeButton, addTrack, LangDrop, actTrack, EditingTitle, addMedia, ConvertProfileDrop, EditOutputPath
 
 
 def modeCheck():
@@ -29,27 +29,29 @@ def bashPreview():
     viewed = app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]
 
     if not app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['profile']:
-        return ft.Text("Не выбран профиль конвертера. Данные будут перенесены без изменений")
+        return [ft.Text("Не выбран профиль конвертера. Данные будут перенесены без изменений")]
     
     
     bash_command = []
     for contain in viewed['converted']:
-        bash_command.append(ft.Container(
-            content=ft.Text(
-                value=contain,
-                style=ft.TextStyle(
-                    font_family="Courier New",
-                    size=14,
-                    color=ft.Colors.BLACK87,
-                    weight=ft.FontWeight.NORMAL
-                )
-            ),
-            bgcolor=ft.Colors.GREY_100,
-            padding=10,
-            border_radius=6,
-            border=ft.border.all(1, ft.Colors.GREY_400),
-            margin=5
-        ))
+        bash_command.append(
+            ft.Container(
+                content=ft.Text(
+                    value=contain,
+                    style=ft.TextStyle(
+                        font_family="Courier New",
+                        size=14,
+                        color=ft.Colors.BLACK87,
+                        weight=ft.FontWeight.NORMAL
+                    )
+                ),
+                bgcolor=ft.Colors.GREY_100,
+                padding=10,
+                border_radius=6,
+                border=ft.border.all(1, ft.Colors.GREY_400),
+                margin=5
+            )
+        )
 
     return bash_command
 
@@ -211,6 +213,10 @@ def GeneralInfo():
             ft.Row([
                 ft.Text(f"Тип файла:", size=15, weight='bold'),
                 ft.Text(f"{app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['extension']} ({app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['type']})", size=15),
+            ]),
+            ft.Row([
+                ft.Text('Путь для сохранения: ', size=15, weight='bold'),
+                EditOutputPath()
             ]),
             ft.Divider(height=1),
 

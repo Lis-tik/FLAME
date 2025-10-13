@@ -4,7 +4,7 @@ from App.storage import app_state
 import App.router as rout
 from tkinter import Tk, filedialog
 import os
-from App.src.projectsControl.DataControl import add_track, dataEdit, add_file
+from App.src.projectsControl.DataControl import add_track, dataEdit, add_file, autopath
 from App.src.convertedition.DataControl import transformation
 
 
@@ -193,6 +193,44 @@ class RuleButton(ft.ElevatedButton):
         app_state.new_page(rout.Editor)
 
 
+
+class EditOutputPath(ft.Container):
+    def __init__(self):
+        super().__init__(expand=True)
+        self.value = self.mode_control()
+        self.active = False
+
+        self.input_field = ft.TextField(
+            expand=True,
+            value=self.value,
+            # on_change=self.on_input_change,
+            autofocus=True,
+            dense=True,
+            content_padding=ft.padding.all(5),
+            border_color=ft.Colors.BLUE,
+        )
+
+        self.content = ft.Row(
+            controls=[self.input_field,
+                        ft.ElevatedButton(content = ft.Icon(ft.Icons.FOLDER, size=15, color=ft.Colors.BLUE_700), on_click=self.remote_path)],
+            spacing=10,
+            expand=True
+        )
+
+    def mode_control(self):
+        if app_state.EditorPage.info_mode != 'general':
+            return app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]['output']
+        
+        return app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['output']
+        
+    def remote_path(self, e):
+        path = filedialog.askdirectory(title="Выберите папку")
+
+        if path: autopath(path)
+        app_state.new_page(rout.Editor)
+
+
+
 class EditingTitle(ft.Container):
     def __init__(self):
         super().__init__()
@@ -212,11 +250,6 @@ class EditingTitle(ft.Container):
 
 
         self.content = ft.Row(
-            controls=self.processing(),
-            spacing=10,
-        )
-
-        self.content=ft.Row(
             controls=self.processing(),
             spacing=10,
         )
@@ -247,8 +280,6 @@ class EditingTitle(ft.Container):
         self.update()
         
         
-
-
 
 
 class SampleMode(ft.Checkbox):

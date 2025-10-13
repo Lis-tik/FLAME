@@ -8,6 +8,14 @@ from datetime import datetime
 
 
 
+def autopath(path):
+    for media in app_state.EditorPage.viewed_files: 
+        app_state.EditorPage.mediainfo[media]['output'] = f'{path}/{app_state.viewed_project}_[by.MUXON]'
+
+        for mode in ['audio', 'video', 'subtitle']:
+            for track in app_state.EditorPage.mediainfo[media][mode]:
+                app_state.EditorPage.mediainfo[media][mode][track]['output'] = f'{path}/{app_state.viewed_project}_[by.MUXON]/{mode}/{'video' if mode == 'video' else app_state.EditorPage.mediainfo[media][mode][track]['title']}'
+
 
 def start_getinfo(path):
     app_state.fixation = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

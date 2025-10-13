@@ -31,6 +31,7 @@ def get_intelligence(new_data, inherits=0):
             'bitrate': float(probe['format']['bit_rate']),
             'status': 1,
             'profile': 0,
+            'output': '',
             'video': {},
             'audio': {},
             'subtitle': {}
@@ -73,6 +74,7 @@ def videostream(stream, path=0):
         'added_date': app_state.fixation,
         'status': 1,
         'path': path,
+        'output': '',
         'converted': []
     }
     return data
@@ -93,6 +95,7 @@ def audiostream(stream, path=0):
         'added_date': app_state.fixation,
         'status': 1,
         'path': path,
+        'output': '',
         'converted': []
 
     }
@@ -111,6 +114,7 @@ def subtitles(stream, path=0):
         'added_date': app_state.fixation,
         'status': 1,
         'path': path,
+        'output': '',
         'converted': []
     }
     return data
