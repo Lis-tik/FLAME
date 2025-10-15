@@ -5,16 +5,18 @@ from App.storage import app_state, EditorPage
 import json
 from pathlib import Path
 from datetime import datetime
+import os
 
 
 
 def autopath(path):
     for media in app_state.EditorPage.viewed_files: 
-        app_state.EditorPage.mediainfo[media]['output'] = f'{path}/{app_state.viewed_project}_[by.MUXON]'
+        series_name, ext = os.path.splitext(app_state.EditorPage.mediainfo[media]['name'])
+        app_state.EditorPage.mediainfo[media]['output'] = f'{path}/{app_state.viewed_project}_[by.MUXON]/{series_name}'
 
         for mode in ['audio', 'video', 'subtitle']:
             for track in app_state.EditorPage.mediainfo[media][mode]:
-                app_state.EditorPage.mediainfo[media][mode][track]['output'] = f'{path}/{app_state.viewed_project}_[by.MUXON]/{mode}/{'video' if mode == 'video' else app_state.EditorPage.mediainfo[media][mode][track]['title']}'
+                app_state.EditorPage.mediainfo[media][mode][track]['output'] = f'{app_state.EditorPage.mediainfo[media]['output']}/{mode}/'
 
 
 def start_getinfo(path):

@@ -16,28 +16,38 @@ def transformation():
                 if app_state.CONVERT_PROFILES[media['profile']][mode]['quality']:
                     for quality in app_state.CONVERT_PROFILES[media['profile']][mode]['quality']:
                         if quality['height'] <= media[mode][track]['height']:
-                            command = f'ffmpeg -i {media['path']}/{media['name']} '
 
-                            command += f'-vf {quality['vf']} '
-                            command += f'-crf {quality['crf']} '
+                            command = ['ffmpeg', 
+                                       '-i', str(f'{media['path']}/{media['name']}'),
+                                       '-vf', str({quality['vf']}),
+                                       '-crf', str({quality['crf']})
+                                       ]
 
 
                             for key in app_state.CONVERT_PROFILES[media['profile']][mode]['arguments']:
                                 value = app_state.CONVERT_PROFILES[media['profile']][mode]['arguments'][key]
-                                command += f'-{key} {value} ' 
+                                command.append(key)
+                                command.append(value)
 
-                            command += f'Короче какой-то output хз'
-                            media[mode][track]['converted'].append(command)
+
+                            command.append(f'{quality['name']}')
+                            if command not in media[mode][track]['converted']:
+                                media[mode][track]['converted'].append(command)
                                 
                 else:
-                    command = f'ffmpeg -i {media['path']}/{media['name']} '
+                    command = ['ffmpeg', 
+                                '-i', str(f'{media['path']}/{media['name']}')
+                                ]
 
                     for key in app_state.CONVERT_PROFILES[media['profile']][mode]['arguments']:
                         value = app_state.CONVERT_PROFILES[media['profile']][mode]['arguments'][key]
-                        command += f'-{key} {value} '
+                        command.append(key)
+                        command.append(value)
 
-                    command += f'Короче какой-то output хз'
-                    media[mode][track]['converted'].append(command)
+                    command.append(f'')
+
+                    if command not in media[mode][track]['converted']:
+                        media[mode][track]['converted'].append(command)
 
 
 

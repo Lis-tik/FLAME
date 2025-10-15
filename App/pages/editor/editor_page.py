@@ -32,8 +32,13 @@ def bashPreview():
         return [ft.Text("Не выбран профиль конвертера. Данные будут перенесены без изменений")]
     
     
+    
     bash_command = []
     for contain in viewed['converted']:
+
+        if viewed['output'] and (viewed['output'] not in contain[-1]):
+            contain[-1] = f'{viewed['output']}/{contain[-1]}'
+        
         bash_command.append(
             ft.Container(
                 content=ft.Text(
