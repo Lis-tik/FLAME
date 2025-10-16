@@ -74,8 +74,8 @@ def videostream(stream, path=0):
         'added_date': app_state.fixation,
         'status': 1,
         'path': path,
-        'output': '',
-        'converted': []
+        'subfolder': 1,
+        'converted': {}
     }
     return data
     
@@ -95,8 +95,8 @@ def audiostream(stream, path=0):
         'added_date': app_state.fixation,
         'status': 1,
         'path': path,
-        'output': '',
-        'converted': []
+        'subfolder': 1,
+        'converted': {}
 
     }
     return data
@@ -114,7 +114,7 @@ def subtitles(stream, path=0):
         'added_date': app_state.fixation,
         'status': 1,
         'path': path,
-        'output': '',
-        'converted': []
+        'subfolder': 0,
+        'converted': {}
     }
     return data

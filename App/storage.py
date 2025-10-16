@@ -88,6 +88,9 @@ class AppState:
         }
 
 
+        self.FORMAT_TYPES = {'dash': '.mpd', 'hls': '.m3u8', 'ass': '.ass'}
+
+
         self.CONVERT_PROFILES = {}
         self.viewed_profile = None
 

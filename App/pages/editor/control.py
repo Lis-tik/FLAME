@@ -9,6 +9,29 @@ from App.src.convertedition.DataControl import transformation
 
 
 
+
+
+def change_output(value=None):
+    for container in app_state.EditorPage.viewed_files:
+        if value:
+            media = app_state.EditorPage.mediainfo[container][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]
+            for profile in media['converted']:
+                media['converted'][profile]['output'] = f'{app_state.EditorPage.mediainfo[container]['output']}/{app_state.EditorPage.info_mode}/{value}/{app_state.EditorPage.info_mode}{app_state.FORMAT_TYPES[media['converted'][profile]['-f']]}'
+
+
+        else:
+            for mode in ['video', 'audio', 'subtitle']:
+                for track in app_state.EditorPage.mediainfo[container][mode]:
+                    for rules in app_state.EditorPage.mediainfo[container][mode][track]['converted']:
+                        media = app_state.EditorPage.mediainfo[container][mode][track]
+                        if rules != 'default':
+                            media['converted'][rules]['output'] = f'{app_state.EditorPage.mediainfo[container]['output']}/{mode}/{rules}/{mode}{app_state.FORMAT_TYPES[media['converted'][rules]['-f']]}'
+                        else:
+                            media['converted'][rules]['output'] = f'{app_state.EditorPage.mediainfo[container]['output']}/{mode}/{media['title']}/{mode}{app_state.FORMAT_TYPES[media['converted'][rules]['-f']]}'
+
+
+
+
 class ConvertProfileDrop(ft.Dropdown):
     def __init__(self):
         super().__init__()
@@ -194,16 +217,18 @@ class RuleButton(ft.ElevatedButton):
 
 
 
+
 class EditOutputPath(ft.Container):
-    def __init__(self):
+    def __init__(self, rule_name=''):
         super().__init__(expand=True)
+        self.rule_name = rule_name
         self.value = self.mode_control()
         self.active = False
 
         self.input_field = ft.TextField(
             expand=True,
             value=self.value,
-            # on_change=self.on_input_change,
+            on_change=self.on_input_change,
             autofocus=True,
             dense=True,
             content_padding=ft.padding.all(5),
@@ -211,23 +236,84 @@ class EditOutputPath(ft.Container):
         )
 
         self.content = ft.Row(
-            controls=[self.input_field,
-                        ft.ElevatedButton(content = ft.Icon(ft.Icons.FOLDER, size=15, color=ft.Colors.BLUE_700), on_click=self.remote_path)],
+            controls=self.processing(),
             spacing=10,
             expand=True
         )
 
+    def shorten_path(self, text, max_len=60):
+        if len(text) <= max_len:
+            return text
+        return "..." + text[-max_len:]
+
+    def on_input_change(self, e):
+        self.value = e.control.value
+
+    def processing(self):
+        if not self.active:
+
+             return [
+                    ft.Container(  # <<< вот это главное!
+                        content=ft.Text(
+                            self.shorten_path(self.value) if self.value else "None",
+                            no_wrap=True,
+                            overflow=ft.TextOverflow.ELLIPSIS,
+                        ),
+                    ),
+                    ft.ElevatedButton(
+                        content=ft.Icon(ft.Icons.EDIT, size=15, color=ft.Colors.BLUE_700),
+                        on_click=self.remote_active
+                    ),
+                    ft.ElevatedButton(
+                        content=ft.Icon(ft.Icons.FOLDER, size=15, color=ft.Colors.BLUE_700),
+                        on_click=self.remote_path
+                    ),
+                ]
+        
+        return [
+                ft.Container(
+                    content=self.input_field,
+                    expand=True
+                ),
+                ft.ElevatedButton(
+                    content=ft.Icon(ft.Icons.CHECK, size=15, color=ft.Colors.BLUE_700),
+                    on_click=self.remote_active
+                ),
+                ft.ElevatedButton(
+                    content=ft.Icon(ft.Icons.FOLDER, size=15, color=ft.Colors.BLUE_700),
+                    on_click=self.remote_path
+                ),
+            ]
+
     def mode_control(self):
         if app_state.EditorPage.info_mode != 'general':
-            return app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]['output']
+            return app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]['converted'][self.rule_name]['output']
         
         return app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]]['output']
         
     def remote_path(self, e):
         path = filedialog.askdirectory(title="Выберите папку")
 
-        if path: autopath(path)
+        if path: 
+            autopath(path)
+            change_output()
         app_state.new_page(rout.Editor)
+
+    def remote_active(self, e):
+        self.active = not(self.active)
+        self.content.controls = self.processing()
+        
+        if not self.active:
+            for media in app_state.EditorPage.viewed_files:
+                if app_state.EditorPage.info_mode == 'general':
+                    app_state.EditorPage.mediainfo[media]['output'] = self.value
+    
+                else:
+                    change_output(self.value)
+
+            app_state.new_page(rout.Editor)
+
+        self.update()  
 
 
 
@@ -252,7 +338,9 @@ class EditingTitle(ft.Container):
         self.content = ft.Row(
             controls=self.processing(),
             spacing=10,
+            expand=True
         )
+
 
 
     def on_input_change(self, e):
@@ -260,7 +348,7 @@ class EditingTitle(ft.Container):
 
     def processing(self):
         if not self.active:
-            return [ft.Text(self.value, size=15),
+            return [ft.Text(self.value, size=15, no_wrap=True, overflow=ft.TextOverflow.ELLIPSIS),
                     ft.ElevatedButton(content = ft.Icon(ft.Icons.EDIT, size=15, color=ft.Colors.BLUE_700), on_click=self.remote_active)]
         
         return [self.input_field,
@@ -276,10 +364,18 @@ class EditingTitle(ft.Container):
         if not self.active:
             print(self.value)
             dataEdit('title', self.value)
+            change_output(self.value)
+
+            
+            app_state.new_page(rout.Editor)
 
         self.update()
         
-        
+class SubfolderCheck(ft.Checkbox):
+    def __init__(self):
+        super().__init__()
+        self.value = app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]['subfolder']
+
 
 
 class SampleMode(ft.Checkbox):

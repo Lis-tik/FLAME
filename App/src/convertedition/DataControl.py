@@ -6,7 +6,9 @@ from App.storage import app_state
 
 
 
+
 def transformation():
+
     for file in app_state.EditorPage.viewed_files:
         media = app_state.EditorPage.mediainfo[file]
 
@@ -15,39 +17,46 @@ def transformation():
                 
                 if app_state.CONVERT_PROFILES[media['profile']][mode]['quality']:
                     for quality in app_state.CONVERT_PROFILES[media['profile']][mode]['quality']:
-                        if quality['height'] <= media[mode][track]['height']:
-
-                            command = ['ffmpeg', 
-                                       '-i', str(f'{media['path']}/{media['name']}'),
-                                       '-vf', str({quality['vf']}),
-                                       '-crf', str({quality['crf']})
-                                       ]
-
-
+                        if app_state.CONVERT_PROFILES[media['profile']][mode]['quality'][quality]['comment_qual'] <= media[mode][track]['height']:
+                            
+                            command = {}
                             for key in app_state.CONVERT_PROFILES[media['profile']][mode]['arguments']:
-                                value = app_state.CONVERT_PROFILES[media['profile']][mode]['arguments'][key]
-                                command.append(key)
-                                command.append(value)
+                                if key == 'OPTIONS':
+                                    for option in app_state.CONVERT_PROFILES[media['profile']][mode]['arguments']['OPTIONS']:
+                                        command[f'-{option}'] = str(app_state.CONVERT_PROFILES[media['profile']][mode]['arguments']['OPTIONS'][option])
+
+                                command['-i'] = f'{media['path']}/{media['name']}'
+                                command['-map'] = f'0:{media[mode][track]['index_contain']}'
+
+                                rule = app_state.CONVERT_PROFILES[media['profile']][mode]['quality'][quality]
+                                for opt in rule:
+                                    if opt != 'comment_qual':
+                                        command[f'-{opt}'] = str(rule[opt])
+
+                                if key != 'OPTIONS':
+                                    value = app_state.CONVERT_PROFILES[media['profile']][mode]['arguments'][key]
+                                    command[f'-{key}'] = str(value) if value else 0
 
 
-                            command.append(f'{quality['name']}')
-                            if command not in media[mode][track]['converted']:
-                                media[mode][track]['converted'].append(command)
+                            command[f'output'] = f'{media['output']}/{mode}/{quality}/{mode}{app_state.FORMAT_TYPES[command['-f']]}'
+                            # if command not in media[mode][track]['converted'][quality['name']]:
+                            media[mode][track]['converted'][quality] = command
                                 
                 else:
-                    command = ['ffmpeg', 
-                                '-i', str(f'{media['path']}/{media['name']}')
-                                ]
+                    command = {
+                                '-i': str(f'{media[mode][track]['path']}'),
+                                '-map': f'0:{media[mode][track]['index_contain']}'
+                            }
+
 
                     for key in app_state.CONVERT_PROFILES[media['profile']][mode]['arguments']:
                         value = app_state.CONVERT_PROFILES[media['profile']][mode]['arguments'][key]
-                        command.append(key)
-                        command.append(value)
+                        command[f'-{key}'] = str(value) if value else 0
 
-                    command.append(f'')
+                    command[f'output'] = (f'{media['output']}/{mode}/{media[mode][track]['title']}/{mode}{app_state.FORMAT_TYPES[command['-f']]}')
 
-                    if command not in media[mode][track]['converted']:
-                        media[mode][track]['converted'].append(command)
+                    # if command not in media[mode][track]['converted'][quality['name']]:
+                    media[mode][track]['converted']['default'] = command
 
 
 

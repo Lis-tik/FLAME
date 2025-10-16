@@ -35,14 +35,12 @@ def bashPreview():
     
     bash_command = []
     for contain in viewed['converted']:
+        cmd = viewed['converted'][contain]
 
-        if viewed['output'] and (viewed['output'] not in contain[-1]):
-            contain[-1] = f'{viewed['output']}/{contain[-1]}'
-        
         bash_command.append(
             ft.Container(
                 content=ft.Text(
-                    value=contain,
+                    value=cmd,
                     style=ft.TextStyle(
                         font_family="Courier New",
                         size=14,
@@ -55,6 +53,17 @@ def bashPreview():
                 border_radius=6,
                 border=ft.border.all(1, ft.Colors.GREY_400),
                 margin=5
+            ),
+        )
+
+
+        bash_command.append(                
+            ft.Row([
+                ft.Text('Путь для сохранения: ', size=15, weight='bold'),
+                EditOutputPath(contain)
+            ],
+            spacing=10,
+            run_spacing=10
             )
         )
 
@@ -108,6 +117,7 @@ def videoChannel():
             ft.Text('Предварительная команда конвертера', size=18, weight='bold'),
             ft.Column(bashPreview())
         ]),
+        expand=True,
         bgcolor=ft.Colors.TRANSPARENT if int(app_state.EditorPage.viewed_track['status']) else ft.Colors.BLACK12
     )
 
@@ -141,6 +151,7 @@ def subtitleChannel():
             ft.Column(bashPreview())
 
         ]),
+        expand=True,
         bgcolor=ft.Colors.TRANSPARENT if int(app_state.EditorPage.viewed_track['status']) else ft.Colors.BLACK12
     )
 
@@ -190,6 +201,7 @@ def audioChannel():
             ft.Text('Предварительная команда конвертера', size=18, weight='bold'),
             ft.Column(bashPreview())
         ]),
+        expand=True,
         bgcolor=ft.Colors.TRANSPARENT if int(app_state.EditorPage.viewed_track['status']) else ft.Colors.BLACK12
     )
 
