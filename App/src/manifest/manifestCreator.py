@@ -15,7 +15,9 @@ class MakerMPD:
 
     def main_control(self):
         self.parse_sounds()
-        self.parse_qualities()
+        
+        if os.path.isdir(f'{self.global_path}/video'):
+            self.parse_qualities()
 
         self.ShellCreate()
         self.edit_mpd()

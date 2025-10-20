@@ -15,8 +15,13 @@ def change_output(value=None):
     for container in app_state.EditorPage.viewed_files:
         if value:
             media = app_state.EditorPage.mediainfo[container][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]
+
             for profile in media['converted']:
-                media['converted'][profile]['output'] = f'{app_state.EditorPage.mediainfo[container]['output']}/{app_state.EditorPage.info_mode}/{value}/{app_state.EditorPage.info_mode}{app_state.FORMAT_TYPES[media['converted'][profile]['-f']]}'
+
+                if media['title'] != value:
+                    media['converted'][profile]['output'] = value
+                else:
+                    media['converted'][profile]['output'] = f'{app_state.EditorPage.mediainfo[container]['output']}/{app_state.EditorPage.info_mode}/{value}/{app_state.EditorPage.info_mode}{app_state.FORMAT_TYPES[media['converted'][profile]['-f']]}'
 
 
         else:
@@ -153,6 +158,7 @@ class addTrack(ft.ElevatedButton):
             
             docker = [f for f in os.listdir(path) if any(f.lower().endswith(fmt) for fmt in app_state.MEDIA_FORMATS)]
             for meta in docker:
+
                 list_cop.append(f'{path}/{meta}')
         else:
             path = filedialog.askopenfilename(title="Выберите файл")
@@ -307,12 +313,11 @@ class EditOutputPath(ft.Container):
             for media in app_state.EditorPage.viewed_files:
                 if app_state.EditorPage.info_mode == 'general':
                     app_state.EditorPage.mediainfo[media]['output'] = self.value
-    
+
                 else:
                     change_output(self.value)
 
             app_state.new_page(rout.Editor)
-
         self.update()  
 
 
@@ -362,7 +367,6 @@ class EditingTitle(ft.Container):
         self.content.controls = self.processing()
         
         if not self.active:
-            print(self.value)
             dataEdit('title', self.value)
             change_output(self.value)
 
@@ -377,21 +381,23 @@ class SubfolderCheck(ft.Checkbox):
         self.value = app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode][app_state.EditorPage.viewed_uid]['subfolder']
 
 
-
 class SampleMode(ft.Checkbox):
     def __init__(self):
         super().__init__()
-        # self.on_change = self.SampleModeFunc
+        self.on_change = self.SampleModeFunc
+        self.value = self.check()
 
-        self.value = False #if (len(app_state.mediainfo_Copy) == len(app_state.files)) else False
 
+    def check(self):
+        for media in app_state.EditorPage.mediainfo:
+            if not app_state.EditorPage.mediainfo[media]['status']:
+                return False
+        return True
+
+ 
     def SampleModeFunc(self, e):
-        for qulT in app_state.files:
-            if not (len(app_state.activeFilesHome) == len(app_state.files)):
-                app_state.activeFilesHome.append(qulT) 
-                continue
-            app_state.activeFilesHome.clear() 
-            break
+        for media in app_state.EditorPage.mediainfo:
+            app_state.EditorPage.mediainfo[media]['status'] = self.value
 
         app_state.new_page(rout.Editor)
 

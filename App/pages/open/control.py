@@ -2,6 +2,7 @@ import flet as ft
 import App.router as rout
 from App.src.projectsControl.DataControl import unpackingData
 from App.storage import app_state
+from App.src.projectsControl.DataControl import saveChange
 
 class ProjManageContainer(ft.Container):
     def __init__(self, data):
@@ -16,10 +17,10 @@ class ProjManageContainer(ft.Container):
                             size=18, 
                             weight=ft.FontWeight.BOLD,
                             color=ft.Colors.BLACK87),
-
-                        ft.Text(f"Последнее изменение:", 
-                            size=12, 
-                            color=ft.Colors.GREY_600),
+                        # ft.Row([
+                        #     ft.Text(f"Последнее изменение:", size=12, color=ft.Colors.GREY_600),
+                        #     ft.Text()
+                        # ])
                     ],
                     spacing=0,
                 ),
@@ -31,6 +32,7 @@ class ProjManageContainer(ft.Container):
         self.on_click = self.projectRule
 
     def projectRule(self, e):
+        saveChange()
         app_state.viewed_project = self.data
-        unpackingData(self.data)
+        app_state.EditorPage.mediainfo = unpackingData(self.data)
         app_state.new_page(rout.Editor)

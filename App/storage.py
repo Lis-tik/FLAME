@@ -1,5 +1,13 @@
 
 
+
+class threadingData:
+    def __init__(self):
+        self.tasks = {}
+        self.log = []
+        self.status = None
+    
+
 class ConverterProfile:
     def __init__(self):
         self.type = None
@@ -39,7 +47,7 @@ class EditorPage:
 
 class AppState:
     def __init__(self):
-        self.projects = None
+        self.projects = {}
         self.page_control = None
 
         self.viewed_project = None
@@ -89,9 +97,10 @@ class AppState:
 
 
         self.FORMAT_TYPES = {'dash': '.mpd', 'hls': '.m3u8', 'ass': '.ass'}
-
-
         self.CONVERT_PROFILES = {}
+        self.PROCESS = []
+        self.viewed_process = None
+
         self.viewed_profile = None
 
         self.InfoData = None
@@ -121,4 +130,3 @@ class AppState:
     
         
 app_state = AppState() 
-

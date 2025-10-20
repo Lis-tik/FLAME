@@ -1,7 +1,7 @@
 import ffmpeg
-from App.src.projectsControl.intelligence import get_intelligence, videostream, audiostream, subtitles
+from App.src.projectsControl.intelligence import get_intelligence
 from App.src.debugcontrol import debug_analysis
-from App.storage import app_state, EditorPage
+from App.storage import app_state
 import json
 from pathlib import Path
 from datetime import datetime
@@ -35,7 +35,7 @@ def start_getinfo(path):
 def add_track(new_data):
     app_state.fixation = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     for index, value in enumerate(app_state.EditorPage.viewed_files):
-        get_intelligence({"name": value}, new_data)
+        get_intelligence({"name": value}, new_data[index])
 
 
 def add_file(name, path):
@@ -63,8 +63,11 @@ def unpackingData(proj):
     with open(f'./UserData/projects/{proj}/data.json', 'r', encoding='utf-8') as file:
         
         data = json.load(file)
+        copy = {}
         for media in data['content']:
-            app_state.EditorPage.mediainfo[media['name']] = media
+            copy[media['name']] = media
+
+        return copy
 
 
             
@@ -73,7 +76,7 @@ def unpackingData(proj):
 
 
 def saveChange():
-    if not app_state.EditorPage.mediainfo:
+    if (not app_state.EditorPage) or (not app_state.EditorPage.mediainfo):
         return
     
     contentLibs = []

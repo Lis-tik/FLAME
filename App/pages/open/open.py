@@ -47,9 +47,6 @@ def project_header():
 
 
 
-
-
-
 def projects_library():
     return ft.Column([
             ft.Text("Откройте сохраненный проект или создайте новый!", size=20, weight='bold'),
@@ -62,7 +59,13 @@ def projects_library():
 
 def projects_manage():
     Path(f"./UserData/projects").mkdir(parents=True, exist_ok=True)
-    app_state.projects = [f for f in os.listdir('./UserData/projects')]
+
+    for project in [f for f in os.listdir('./UserData/projects')]:
+        app_state.projects[project] = {
+            'name': 'project',
+            'editdate': '',
+            'ThStatus': None
+        }
     return projects_library()
     
 

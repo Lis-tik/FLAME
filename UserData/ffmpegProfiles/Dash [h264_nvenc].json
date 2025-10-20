@@ -1,0 +1,61 @@
+{
+    "changeData": "123213",
+    "profile": {
+        "name": "Dash [h264_nvenc]",
+        "video": {
+            "quality": {
+                "2160p": {"vf": "scale_cuda=3840:2160:format=yuv420p,hwdownload", "cq": 15, "comment_qual": 2160},
+                "1440p": {"vf": "scale_cuda=2560:1440:format=yuv420p,hwdownload", "cq": 17, "comment_qual": 1440},
+                "1080p": {"vf": "scale_cuda=1920:1080:format=yuv420p,hwdownload", "cq": 19, "comment_qual": 1080},
+                "720p": {"vf": "scale_cuda=1280:720:format=yuv420p,hwdownload", "cq": 24, "comment_qual": 720},
+                "480p": {"vf": "scale_cuda=854:480:format=yuv420p,hwdownload", "cq": 26, "comment_qual": 480},
+                "360p": {"vf": "scale_cuda=640:360:format=yuv420p,hwdownload", "cq": 28, "comment_qual": 360}
+            },
+            "arguments": {
+                "OPTIONS": {
+                    "hwaccel": "cuda",
+                    "hwaccel_output_format": "cuda"
+                },
+                "c:v": "h264_nvenc",
+                "preset": "p2",
+                "rc-lookahead": 32, 
+                "spatial-aq": 1, 
+                "temporal-aq": 1, 
+                "multipass": "fullres",
+                "profile:v": "high",
+                "pix_fmt": "yuv420p",
+                "dn": 0,
+                "an": 0,
+                "sn": 0,
+                "f": "dash",
+                "seg_duration": 5,
+                "use_timeline": 1,
+                "init_seg_name": "init.mp4",
+                "media_seg_name": "segment_$Number%05d$.m4s",
+                "g": 240
+            }
+
+        },
+        "audio": {
+            "quality": 0,
+            "arguments": {
+                "ac": "2",  
+                "codec": "aac",    
+                "sn": 0,
+                "vn": 0,
+                "af": "aresample=async=1",
+                "f": "dash",
+                "seg_duration": 5,
+                "frag_type": "every_frame"
+            }
+        },
+        "subtitle": {
+            "quality": 0,
+            "arguments": {
+                "codec": "ass", 
+                "f": "ass"   
+            }
+        }
+    }
+
+}

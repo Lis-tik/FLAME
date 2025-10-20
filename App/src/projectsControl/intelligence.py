@@ -15,7 +15,7 @@ def get_intelligence(new_data, inherits=0):
     if not inherits:
         prode_file = f'{new_data['path']}/{new_data['name']}'   
     else:
-        prode_file = inherits[-1]
+        prode_file = inherits
 
 
     probe = ffmpeg.probe(prode_file)

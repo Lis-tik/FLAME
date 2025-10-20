@@ -2,7 +2,7 @@ import flet as ft
 from App.storage import app_state
 import App.router as rout
 from App.pages.editor.control import UnificationButton, RuleButton, SampleMode, StatusCheck, StatusMediaFlag, ModeButton, addTrack, LangDrop, actTrack, EditingTitle, addMedia, ConvertProfileDrop, EditOutputPath
-
+from App.src.projectsControl.DataControl import saveChange
 
 def modeCheck():
     if app_state.EditorPage.viewed_uid in app_state.EditorPage.mediainfo[app_state.EditorPage.viewed_files[-1]][app_state.EditorPage.info_mode]:
@@ -355,11 +355,12 @@ def distributionData():
 
 
 def get_editor_page():
+    saveChange()
     if not app_state.EditorPage:
         return ft.Container(
             content=ft.Column(
                 [
-                    ft.Text('Выбирете или создайте новый проект', size=20, weight='bold'),
+                    ft.Text('Выберите или создайте новый проект', size=20, weight='bold'),
                     ft.ElevatedButton('Вернуться к менеджеру проектов', on_click=lambda e: app_state.new_page(rout.Projects)),
                 ],
                 alignment="center",

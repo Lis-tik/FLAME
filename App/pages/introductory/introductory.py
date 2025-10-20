@@ -5,7 +5,7 @@ from App.storage import app_state
 def introductory():
     return ft.Column(
         controls=[
-            ft.Text('Добро пожаловать в FLAME', size=20, weight='bold'),
+            ft.Text('Добро пожаловать в MUXON', size=20, weight='bold'),
             ft.TextButton(
                 content=ft.Text(
                     "Официальный GitHub разработчика",
