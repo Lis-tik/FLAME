@@ -1,6 +1,6 @@
 import flet as ft
 import App.router as rout
-from App.src.projectsControl.DataControl import unpackingData
+from App.src.projectsControl.DataControl import unpackingData, saveChange
 from App.storage import app_state
 from App.src.projectsControl.DataControl import saveChange
 
@@ -36,3 +36,37 @@ class ProjManageContainer(ft.Container):
         app_state.viewed_project = self.data
         app_state.EditorPage.mediainfo = unpackingData(self.data)
         app_state.new_page(rout.Editor)
+
+
+class dlg_modal(ft.AlertDialog):
+    def __init__(self):
+        super().__init__()
+        self.modal = True
+
+        self.proj_nmae = ft.TextField(label="Имя проекта", width=200)
+
+        
+        self.title=ft.Text("Создание проекта")
+
+        self.content = ft.Container(
+            content=self.proj_nmae,
+            width=220,
+            height=80,
+            padding=5
+        )
+
+        self.actions=[
+                ft.TextButton("Создать", on_click=self.create),
+                ft.TextButton("Отмена", on_click=lambda e: app_state.page_control.close(self)),
+            ]
+        self.actions_alignment=ft.MainAxisAlignment.END
+
+
+    def create(self, e):
+        if self.proj_nmae.value:
+            app_state.viewed_project = self.proj_nmae.value
+            app_state.page_control.close(self)
+            app_state.EditorPage.project_name = self.proj_nmae.value
+            saveChange()
+            app_state.new_page(rout.Editor)
+        

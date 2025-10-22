@@ -39,6 +39,7 @@ def add_track(new_data):
 
 
 def add_file(name, path):
+    app_state.fixation = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     get_intelligence({"name": name, "path": path})
 
 
@@ -60,7 +61,7 @@ def dataEdit(key, new_value):
 
 
 def unpackingData(proj):
-    with open(f'./UserData/projects/{proj}/data.json', 'r', encoding='utf-8') as file:
+    with open(f'./UserData/projects/{proj}.json', 'r', encoding='utf-8') as file:
         
         data = json.load(file)
         copy = {}
@@ -68,9 +69,7 @@ def unpackingData(proj):
             copy[media['name']] = media
 
         return copy
-
-
-            
+  
         
 
 
@@ -84,7 +83,7 @@ def saveChange():
         contentLibs.append(app_state.EditorPage.mediainfo[cont])
 
     data = {
-        "name": app_state.project_name,
+        "name": app_state.EditorPage.project_name,
         "changeData": str(datetime.now()),
         "content": contentLibs
     }

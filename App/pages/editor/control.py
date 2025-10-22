@@ -223,6 +223,36 @@ class RuleButton(ft.ElevatedButton):
 
 
 
+class EditProjName(ft.Container):
+    def __init__(self):
+        super().__init__()
+        self.active = False
+        self.value = app_state.EditorPage.project_name
+        self.content = ft.Row(self.processing())
+
+
+    def on_input_change(self, e):
+        self.value = e.control.value
+
+    def processing(self):
+        if not self.active:
+            return [ft.Text(self.value, size=15, no_wrap=True, overflow=ft.TextOverflow.ELLIPSIS),
+                    ft.ElevatedButton(content = ft.Icon(ft.Icons.EDIT, size=15, color=ft.Colors.BLUE_700), on_click=self.remote_active)]
+        
+        return [self.input_field,
+                ft.ElevatedButton(content = ft.Icon(ft.Icons.CHECK, size=15, color=ft.Colors.BLUE_700), on_click=self.remote_active)]
+    
+    def remote_active(self, e):
+        self.active = not(self.active)
+
+        if not self.active:
+            app_state.EditorPage.project_name = self.value
+            app_state.new_page(rout.Editor)
+
+        self.update()  
+
+
+
 
 class EditOutputPath(ft.Container):
     def __init__(self, rule_name=''):

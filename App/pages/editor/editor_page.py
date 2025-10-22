@@ -1,7 +1,7 @@
 import flet as ft
 from App.storage import app_state
 import App.router as rout
-from App.pages.editor.control import UnificationButton, RuleButton, SampleMode, StatusCheck, StatusMediaFlag, ModeButton, addTrack, LangDrop, actTrack, EditingTitle, addMedia, ConvertProfileDrop, EditOutputPath
+from App.pages.editor.control import UnificationButton, RuleButton, SampleMode, StatusCheck, StatusMediaFlag, ModeButton, addTrack, LangDrop, actTrack, EditingTitle, addMedia, ConvertProfileDrop, EditOutputPath, EditProjName
 from App.src.projectsControl.DataControl import saveChange
 
 def modeCheck():
@@ -373,7 +373,8 @@ def get_editor_page():
 
     return ft.Column(
         controls=[
-            ft.Text(app_state.viewed_project, size=20, weight='bold'),
+            EditProjName(),
+            # ft.Text(app_state.viewed_project, size=20, weight='bold'),
             Information()
         ],
         expand=True,

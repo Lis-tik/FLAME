@@ -15,6 +15,7 @@ class ConverterProfile:
 
 class EditorPage:
     def __init__(self):
+        self.project_name = None
         self.info_mode = 'general'
         self.global_path = None
         self.mediainfo = {}
@@ -54,7 +55,6 @@ class AppState:
         self.page = None
 
         self.transition = False
-        self.project_name = "Мой проект"
         self.MEDIA_FORMATS = [
             # Видео контейнеры
             '.mkv', '.mp4', '.avi', '.mov', '.wmv', '.flv', '.webm', '.m4v',

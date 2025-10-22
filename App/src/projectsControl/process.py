@@ -81,8 +81,8 @@ def start(input_process):
 
 
 
-            debugStart = MakerMPD(global_path=media['output'])
-            debugStart.main_control()
+            # debugStart = MakerMPD(global_path=media['output'])
+            # debugStart.main_control()
 
 
 
