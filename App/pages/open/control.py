@@ -32,7 +32,6 @@ class ProjManageContainer(ft.Container):
         self.on_click = self.projectRule
 
     def projectRule(self, e):
-        saveChange()
         app_state.viewed_project = self.data
         app_state.EditorPage.mediainfo = unpackingData(self.data)
         app_state.new_page(rout.Editor)

@@ -4,7 +4,7 @@ from App.storage import app_state
 import App.router as rout
 import os
 from pathlib import Path
-from App.src.projectsControl.DataControl import start_getinfo
+# from App.src.projectsControl.DataControl import start_getinfo
 from App.src.projectsControl.DataControl import saveChange
 
 from App.pages.open.control import ProjManageContainer, dlg_modal
@@ -29,7 +29,7 @@ def open_directory_dialog():
         app_state.viewed_project = app_state.EditorPage.project_name
         # app_state.EditorPage.global_path = directory
         app_state.EditorPage.files = [f for f in os.listdir(directory) if any(f.lower().endswith(fmt) for fmt in app_state.MEDIA_FORMATS)]
-        start_getinfo(directory)
+        # start_getinfo(directory)
         saveChange()
         app_state.new_page(rout.Editor)
 

@@ -19,18 +19,6 @@ def autopath(path):
                 app_state.EditorPage.mediainfo[media][mode][track]['output'] = f'{app_state.EditorPage.mediainfo[media]['output']}/{mode}/'
 
 
-def start_getinfo(path):
-    app_state.fixation = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    for x in range(len(app_state.EditorPage.files)):
-        name_path = app_state.EditorPage.files[x]
-
-        new_data = {
-            'name': name_path,
-            'path': path
-        }
-
-        get_intelligence(new_data)
-
 
 def add_track(new_data):
     app_state.fixation = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -38,9 +26,12 @@ def add_track(new_data):
         get_intelligence({"name": value}, new_data[index])
 
 
-def add_file(name, path):
+def add_file(data):
     app_state.fixation = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    get_intelligence({"name": name, "path": path})
+
+    for addData in data:
+        # get_intelligence({"name": name, "path": path})
+        get_intelligence(addData)
 
 
 
@@ -61,7 +52,7 @@ def dataEdit(key, new_value):
 
 
 def unpackingData(proj):
-    with open(f'./UserData/projects/{proj}.json', 'r', encoding='utf-8') as file:
+    with open(f'./UserData/projects/{proj}/data.json', 'r', encoding='utf-8') as file:
         
         data = json.load(file)
         copy = {}
@@ -75,21 +66,25 @@ def unpackingData(proj):
 
 
 def saveChange():
-    if (not app_state.EditorPage) or (not app_state.EditorPage.mediainfo):
-        return
+    # if (not app_state.EditorPage) or (not app_state.EditorPage.mediainfo):
+    #     return
     
-    contentLibs = []
-    for cont in app_state.EditorPage.mediainfo:
-        contentLibs.append(app_state.EditorPage.mediainfo[cont])
-
     data = {
         "name": app_state.EditorPage.project_name,
         "changeData": str(datetime.now()),
-        "content": contentLibs
+        "content": []
     }
+
+    if app_state.EditorPage.mediainfo:
+        for cont in app_state.EditorPage.mediainfo:
+            data['content'].append(app_state.EditorPage.mediainfo[cont])
+
 
 
     file_path = Path(f"./UserData/projects/{app_state.viewed_project}/data.json")
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+    file_path.touch(exist_ok=True)
+    
     with open(file_path, 'w', encoding='utf-8') as file:
         json.dump(data, file, ensure_ascii=False, indent=4)
 

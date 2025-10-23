@@ -82,18 +82,17 @@ class addMedia(ft.ElevatedButton):
         self.on_click = self.tracknum
 
     def tracknum(self, e):
-        path = filedialog.askopenfilename(title="Выберите файл")
-        if path:
-            directory = os.path.dirname(path)
-            filename = os.path.basename(path)
-            add_file(filename, directory)
+        files = filedialog.askopenfiles(title="Выберите файл")
+        if not files:
+            return 
+
+        data = [{"name": os.path.basename(f.name), "path": os.path.dirname(f.name)} for f in files]
+        add_file(data)
+
+
         app_state.new_page(rout.Editor)
 
         
-
-
-
-
 
 
 class actTrack(ft.ElevatedButton):
